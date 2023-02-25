@@ -26,7 +26,6 @@ public class Broker extends Agent {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 table = new BrokerTablePanel();
-                table.createBrokerGUIandShow();
             }
         });
 
@@ -46,6 +45,7 @@ public class Broker extends Agent {
     public class BrokerTablePanel extends JPanel {
 
         private JTable table;
+        private JFrame frame;
         private final String columnNames[] = { "Vendeur", "Nom du lot", "Montant courant de l'enchere", "Data" };
         private final String title = "Broker's view of the market";
 
@@ -65,22 +65,13 @@ public class Broker extends Agent {
 
             // Add the scroll pane to the panel
             add(scrollPane);
-        }
 
-        public void createBrokerGUIandShow() {
-            JFrame frame = new JFrame(title);
+            frame = new JFrame(title);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            
-            BrokerTablePanel panel = new BrokerTablePanel();
-            frame.getContentPane().add(panel);
+            frame.getContentPane().add(this);
     
             frame.pack();
             frame.setVisible(true);
         }
-
     }
-
-    
-
-
 }

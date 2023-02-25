@@ -1,4 +1,5 @@
 package fishmarket;
+
 import jade.lang.acl.*;
 
 public class PerformativeCreator {
@@ -45,9 +46,12 @@ public class PerformativeCreator {
 		return msg;
 	}
 
-	public static ACLMessage createRepBidMsg(String isOk) {
+	public static ACLMessage createRepBidMsg(boolean isOk) {
 		ACLMessage msg = new ACLMessage(Performatifs.V_REP_BID.getValue());
-		msg.setContent(isOk);
+		if (isOk)
+			msg.setContent("OK");
+		else
+			msg.setContent("NOK");
 		return msg;
 	}
 
