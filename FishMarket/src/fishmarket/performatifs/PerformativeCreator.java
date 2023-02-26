@@ -9,6 +9,10 @@ import jade.domain.FIPANames;
 import jade.lang.acl.*;
 
 public class PerformativeCreator {
+
+
+	private final String TAG = "PerformativeCreator | ";
+
 	private AID brokerAID;
 
 	
@@ -21,7 +25,9 @@ public class PerformativeCreator {
 	 * @throws IOException
 	 */
 	public ACLMessage createToAnnounceMsg(AuctionItem auctionItem) throws IOException {
-		ACLMessage msg = new ACLMessage(Performatifs.V_TO_ANNOUNCE.getJadeEquivalent());
+		int performative = Performatifs.V_TO_ANNOUNCE.getJadeEquivalent();
+		System.out.println(TAG + "Performative of announce message: " + performative);
+		ACLMessage msg = new ACLMessage(performative);
 		msg.addReceiver(brokerAID);
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msg.setContentObject(auctionItem);

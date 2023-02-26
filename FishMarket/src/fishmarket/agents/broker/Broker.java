@@ -13,13 +13,15 @@ import jade.lang.acl.MessageTemplate;
 
 public class Broker extends Agent {
 
+    public static final String TAG = "BROKER AGENT | ";
+
     private BrokerGUI table;
     private List<AuctionInstance> auctions;
     private MessageTemplate template;
 
     @Override
     protected void setup() {
-        System.out.println("BROKER Agent " + getLocalName() + " ONLINE");
+        System.out.println(TAG + getLocalName() + " ONLINE");
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -39,7 +41,7 @@ public class Broker extends Agent {
 
     public void createAuctionInstance(AuctionItem item, AID seller) {
         AuctionInstance auctionInstance = new AuctionInstance(item, seller);
-        System.out.println("creating auction " + auctionInstance.toString());
+        System.out.println(TAG + "Creating auction " + auctionInstance.toString());
         auctions.add(auctionInstance);
         table.refreshTableData(auctions);
     }

@@ -18,7 +18,7 @@ import fishmarket.performatifs.PerformativeCreator;
  */
 public class Seller extends Agent {
 
-	private static final String TAG = "SELLER AGENT: ";
+	private static final String TAG = "SELLER AGENT | ";
 	private String brokerAgentName;
 	private PerformativeCreator pCreator;
 

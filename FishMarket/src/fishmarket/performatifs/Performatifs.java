@@ -18,6 +18,7 @@ public enum Performatifs {
 	}
 
 	public int getJadeEquivalent() {
+		System.out.println("JADE EQUIVALENT : " + jadeEquivalent);
 		return jadeEquivalent;
 	}
 }
