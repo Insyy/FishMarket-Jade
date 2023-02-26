@@ -22,7 +22,7 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 .project
-FishMarket/APDescription.txt
-FishMarket/MTPs-Main-Container.txt
-FishMarket/.vscode/settings.json
+APDescription.txt
+MTPs-Main-Container.txt
+.vscode/settings.json
 .classpath
