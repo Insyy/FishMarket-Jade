@@ -34,6 +34,11 @@ public class BrokerGUI extends JPanel {
                     boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 BrokerTableModel brokerTableModel = (BrokerTableModel) table.getModel();
+                processRow(table, row, brokerTableModel);
+                return this;
+            }
+
+            private void processRow(JTable table, int row, BrokerTableModel brokerTableModel) {
                 if (!brokerTableModel.isRowActive(row)) {
                     setBackground(brokerTableModel.ROW_INACTIVE_COLOR);
                     setForeground(Color.WHITE);
@@ -41,7 +46,6 @@ public class BrokerGUI extends JPanel {
                     setBackground(table.getBackground());
                     setForeground(table.getForeground());
                 }
-                return this;
             }
         });
 
