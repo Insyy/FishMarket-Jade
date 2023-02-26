@@ -4,6 +4,8 @@ import jade.core.Agent;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import java.io.IOException;
+import java.util.Random;
+
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.PerformativeCreator;
 
@@ -18,33 +20,34 @@ import fishmarket.performatifs.PerformativeCreator;
  */
 public class Seller extends Agent {
 
-	private static final String TAG = "SELLER AGENT | ";
+	private static String TAG = "SELLER AGENT";
 	private String brokerAgentName;
 	private PerformativeCreator pCreator;
 
 	protected void setup() {
+		TAG += getName() + " |> ";
 		// Read names of responders as arguments
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
 
 			brokerAgentName = (String) args[0];
-			System.out.println(TAG + "Name of broker agent is :" + brokerAgentName);
+			System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
 
 			pCreator = new PerformativeCreator(new AID(brokerAgentName, AID.ISLOCALNAME));
 
-			publishAuctionItem("Dorade", 26, 1, (float) .5);
+			publishAuctionItem("Dourade", new Random().nextInt(100), 1, (float) .5, (float) .9);
 
 		} else
-			System.out.println(TAG + " No broker name specified.");
+			System.out.println(TAG + "No broker name specified.");
 
 	}
 
-	private void publishAuctionItem(String name, int price, int delay, float step) {
+	private void publishAuctionItem(String name, int price, int delay, float step_rise, float step_decrease) {
 		// Fill the REQUEST message
 		ACLMessage msg;
 		try {
-			AuctionItem item = new AuctionItem(name, price, delay, step);
-			System.out.println(TAG + "publishing auction item " + item.toString());
+			AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
+			System.out.println(TAG + "Publishing auction item " + item.toString());
 			msg = pCreator.createToAnnounceMsg(item);
 			addBehaviour(new SellerBehaviour(this, msg));
 		} catch (IOException e) {

@@ -5,13 +5,12 @@ import java.util.Date;
 
 import fishmarket.auction.AuctionItem;
 import jade.core.AID;
-import jade.domain.FIPANames;
 import jade.lang.acl.*;
 
 public class PerformativeCreator {
 
 
-	private final String TAG = "PerformativeCreator | ";
+	private final String TAG = "PerformativeCreator |> ";
 
 	private AID brokerAID;
 
@@ -20,18 +19,22 @@ public class PerformativeCreator {
 		this.brokerAID = brokerAID;
 	}
 
+	private ACLMessage createBasicMessage(){
+		ACLMessage msg = new ACLMessage();
+		msg.addReceiver(brokerAID);
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+		return msg;
+	}
+
 	/**
 	 * VENDEUR
 	 * @throws IOException
 	 */
 	public ACLMessage createToAnnounceMsg(AuctionItem auctionItem) throws IOException {
 		int performative = Performatifs.V_TO_ANNOUNCE.getJadeEquivalent();
-		System.out.println(TAG + "Performative of announce message: " + performative);
-		ACLMessage msg = new ACLMessage(performative);
-		msg.addReceiver(brokerAID);
-		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		ACLMessage msg = createBasicMessage();
 		msg.setContentObject(auctionItem);
-		msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+		msg.setPerformative(performative);
 		return msg;
 	}
 

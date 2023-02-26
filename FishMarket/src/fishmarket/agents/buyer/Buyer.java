@@ -4,8 +4,6 @@ import jade.core.Agent;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-import jade.domain.FIPANames;
-
 import java.util.Date;
 
 /**
@@ -32,9 +30,7 @@ public class Buyer extends Agent {
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 			for (int i = 0; i < args.length; ++i) {
 				msg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
-			}
-			msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-			// We want to receive a reply in 10 secs
+			}			// We want to receive a reply in 10 secs
 			msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 			msg.setContent("Display me please");
 

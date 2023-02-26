@@ -12,7 +12,7 @@ import jade.proto.AchieveREResponder;
 
 public class BrokerBehaviour extends AchieveREResponder {
 
-    private String TAG = "BROKER BEHAVIOUR | ";
+    private String TAG = "BROKER BEHAVIOUR |> ";
 
     public BrokerBehaviour(Agent a, MessageTemplate mt) {
         super(a, mt);
@@ -24,24 +24,20 @@ public class BrokerBehaviour extends AchieveREResponder {
         System.out.println(TAG + " Handle request");
 
         int jadePerformative = request.getPerformative();
-        System.out.println(TAG + "Performative: "+ jadePerformative);
         if (jadePerformative == Performatifs.V_TO_ANNOUNCE.getJadeEquivalent())
             return toAnnounceHandler(request);
-        else if (jadePerformative == Performatifs.P_TO_BID.getJadeEquivalent()) {
-
-        }
 
         return super.handleRequest(request);
     }
 
     private ACLMessage toAnnounceHandler(ACLMessage request) {
-        System.out.println(TAG + "TO ANNOUNCE HANDLER");
-        Broker brokerAgent = (Broker) getAgent();
         try {
-            brokerAgent.createAuctionInstance((AuctionItem) request.getContentObject(), request.getSender());
+            ((Broker) getAgent()).createAuctionInstance((AuctionItem) request.getContentObject(), request.getSender());
         } catch (UnreadableException e) {
             e.printStackTrace();
         }
-        return request;
+        ACLMessage msg = request.createReply();
+        msg.setPerformative(ACLMessage.INFORM);
+        return msg;
     }
 }

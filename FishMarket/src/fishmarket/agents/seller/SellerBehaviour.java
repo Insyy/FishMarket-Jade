@@ -6,11 +6,10 @@ import jade.proto.AchieveREInitiator;
 
 public class SellerBehaviour extends AchieveREInitiator {
 
-    private static final String TAG = "SELLER BEHAVIOUR | ";
+    private static final String TAG = "SELLER BEHAVIOUR |> ";
 
     public SellerBehaviour(Agent a, ACLMessage msg) {
         super(a, msg);
-        System.out.println(TAG + " behaviour added");
     }
 
     protected void handleInform(ACLMessage inform) {

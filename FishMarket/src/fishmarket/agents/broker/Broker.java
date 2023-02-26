@@ -7,43 +7,29 @@ import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.domain.FIPANames;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 public class Broker extends Agent {
 
-    public static final String TAG = "BROKER AGENT | ";
+    public static final String TAG = "BROKER AGENT |> ";
 
-    private BrokerGUI table;
+    private BrokerGUI brokerGUI;
     private List<AuctionInstance> auctions;
-    private MessageTemplate template;
 
     @Override
     protected void setup() {
         System.out.println(TAG + getLocalName() + " ONLINE");
 
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                table = new BrokerGUI();
-            }
-        });
-
-        template = MessageTemplate.and(
-                MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-
+        brokerGUI = new BrokerGUI();
         auctions = new ArrayList<>();
 
-        addBehaviour(new BrokerBehaviour(this, template));
+        addBehaviour(new BrokerBehaviour(this, null));
 
     }
 
     public void createAuctionInstance(AuctionItem item, AID seller) {
         AuctionInstance auctionInstance = new AuctionInstance(item, seller);
-        System.out.println(TAG + "Creating auction " + auctionInstance.toString());
         auctions.add(auctionInstance);
-        table.refreshTableData(auctions);
+        brokerGUI.recreateGUI(auctions);
     }
 
 }
