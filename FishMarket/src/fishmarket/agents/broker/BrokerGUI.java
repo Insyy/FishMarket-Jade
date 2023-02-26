@@ -23,7 +23,6 @@ public class BrokerGUI extends JPanel {
 
     public BrokerGUI() {
         super();
-        // Create a new table with some sample data
         table = new JTable(new BrokerTableModel());
 
         table.setFillsViewportHeight(true);
@@ -58,8 +57,6 @@ public class BrokerGUI extends JPanel {
 
         frame.pack();
         frame.setVisible(true);
-
-
     }
 
     public void recreateGUI(List<AuctionInstance> auctions) {
@@ -83,7 +80,7 @@ public class BrokerGUI extends JPanel {
             try {
                 b = rowStates.get(row);
             } catch (IndexOutOfBoundsException e) {
-
+                e.printStackTrace();
             }
             return b;
         }
@@ -98,7 +95,6 @@ public class BrokerGUI extends JPanel {
                 addRow(auction.getItem().toStringArrayGUI(auction.getSeller().getName()));
                 rowStates.add(auction.isActive());
             }
-
             fireTableDataChanged();
         }
     }

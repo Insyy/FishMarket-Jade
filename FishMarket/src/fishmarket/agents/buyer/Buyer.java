@@ -17,11 +17,13 @@ import java.util.Date;
  */
 public class Buyer extends Agent {
 
-	public static final String TAG = "BUYER AGENT | ";
+	public static String TAG;
 
 	protected void setup() {
+		TAG = getName() + " |> ";
 		// Read names of responders as arguments
 		Object[] args = getArguments();
+		
 		if (args != null && args.length > 0) {
 
 			System.out.println(TAG + "Name of broker agent is :" + args[0]);

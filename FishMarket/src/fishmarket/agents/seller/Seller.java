@@ -20,16 +20,19 @@ import fishmarket.performatifs.PerformativeCreator;
  */
 public class Seller extends Agent {
 
-	private static String TAG = "SELLER AGENT";
+	private static String TAG;
 	private String brokerAgentName;
 	private PerformativeCreator pCreator;
 
 	protected void setup() {
-		TAG += getName() + " |> ";
-		// Read names of responders as arguments
+		TAG = getName() + " |> ";
+		// Read name of broker as argument
 		Object[] args = getArguments();
-		if (args != null && args.length > 0) {
 
+		if (!(args != null && args.length > 0)) {
+			System.out.println(TAG + "No broker name specified.");
+			return;
+		}
 			brokerAgentName = (String) args[0];
 			System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
 
@@ -37,13 +40,9 @@ public class Seller extends Agent {
 
 			publishAuctionItem("Dourade", new Random().nextInt(100), 1, (float) .5, (float) .9);
 
-		} else
-			System.out.println(TAG + "No broker name specified.");
-
 	}
 
 	private void publishAuctionItem(String name, int price, int delay, float step_rise, float step_decrease) {
-		// Fill the REQUEST message
 		ACLMessage msg;
 		try {
 			AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
@@ -53,6 +52,5 @@ public class Seller extends Agent {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 }

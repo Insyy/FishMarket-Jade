@@ -10,26 +10,24 @@ import jade.core.Agent;
 
 public class Broker extends Agent {
 
-    public static final String TAG = "BROKER AGENT |> ";
+    public static String TAG;
 
     private BrokerGUI brokerGUI;
     private List<AuctionInstance> auctions;
 
     @Override
     protected void setup() {
+        TAG = getName() + " |> ";
         System.out.println(TAG + getLocalName() + " ONLINE");
 
-        brokerGUI = new BrokerGUI();
         auctions = new ArrayList<>();
-
+        brokerGUI = new BrokerGUI();
+        
         addBehaviour(new BrokerBehaviour(this, null));
-
     }
 
     public void createAuctionInstance(AuctionItem item, AID seller) {
-        AuctionInstance auctionInstance = new AuctionInstance(item, seller);
-        auctions.add(auctionInstance);
+        auctions.add(new AuctionInstance(item, seller));
         brokerGUI.recreateGUI(auctions);
     }
-
 }
