@@ -1,4 +1,4 @@
-package fishmarket.agents;
+package fishmarket.agents.buyer;
 
 import jade.core.Agent;
 import jade.core.AID;
@@ -23,7 +23,7 @@ public class Buyer extends Agent {
   	Object[] args = getArguments();
   	if (args != null && args.length > 0) {
 
-		System.out.println("Name of broker agent is :" + args[0]);
+		System.out.println("BUYER: Name of broker agent is :" + args[0]);
   		
   		// Fill the REQUEST message
   		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);

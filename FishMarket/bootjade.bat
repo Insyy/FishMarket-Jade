@@ -1,8 +1,8 @@
-javac src\fishmarket\agents\Broker.java
-javac src\fishmarket\agents\Buyer.java
-javac src\fishmarket\agents\Seller.java
+javac -cp "bin\;lib\jade.jar" -d bin\ src\fishmarket\auction\*.java
+javac -cp "bin\;lib\jade.jar" -d bin\ src\fishmarket\performatifs\*.java
+javac -cp "bin\;lib\jade.jar" -d bin\ src\fishmarket\agents\seller\*.java
+javac -cp "bin\;lib\jade.jar" -d bin\ src\fishmarket\agents\broker\*.java
+javac -cp "bin\;lib\jade.jar" -d bin\ src\fishmarket\agents\buyer\*.java
 
-javac src\fishmarket\PerformativeCreator.java
-javac src\fishmarket\PerformativeCreator.java
 
-java -cp "lib\jade.jar;src\;" jade.Boot -gui market:fishmarket.agents.Broker;buyer:fishmarket.agents.Buyer(market);seller:fishmarket.agents.Seller(market);
+java -cp "bin\;lib\jade.jar" jade.Boot -gui market:fishmarket.agents.broker.Broker;buyer:fishmarket.agents.buyer.Buyer(market);seller:fishmarket.agents.seller.Seller(market);
