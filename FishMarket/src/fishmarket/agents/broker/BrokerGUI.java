@@ -59,6 +59,7 @@ public class BrokerGUI extends JPanel {
         frame.pack();
         frame.setVisible(true);
 
+
     }
 
     public void recreateGUI(List<AuctionInstance> auctions) {
