@@ -28,7 +28,6 @@ public class MessageCreator {
 
 		if (content.isPresent())
 			msg.setContentObject(content.get());
-		
 		return msg;
 	}
 
@@ -36,7 +35,6 @@ public class MessageCreator {
 	 * VENDEUR
 	 * @throws IOException
 	 */
-
 	public ACLMessage createToAttributeMsg() {
 		ACLMessage msg = new ACLMessage(Performatifs.V_TO_ATTRIBUTE.getJadeEquivalent());
 		return msg;

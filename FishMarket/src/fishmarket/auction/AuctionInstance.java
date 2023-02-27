@@ -8,7 +8,7 @@ public class AuctionInstance {
     private AuctionItem item;
     private List<AID> buyers;
     private AID seller;
-    private boolean isActive = false;
+    private boolean isActive = true;
 
     public AuctionInstance(AuctionItem item, AID seller) {
         this.item = item;
@@ -41,7 +41,6 @@ public class AuctionInstance {
         return seller;
     }
 
-
     public boolean isActive() {
         return isActive;
     }
@@ -49,8 +48,6 @@ public class AuctionInstance {
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
-
-
 
     private class BuyerAlreadyExistsException extends Exception {}
 
@@ -61,7 +58,4 @@ public class AuctionInstance {
         return "AuctionInstance [item=" + item + ", buyers=" + buyers + ", seller=" + seller + ", isActive=" + isActive
                 + "]";
     }
-
-
-    
 }

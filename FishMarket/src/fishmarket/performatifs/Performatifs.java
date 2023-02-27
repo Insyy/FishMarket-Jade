@@ -17,7 +17,6 @@ public enum Performatifs {
 		this.jadeEquivalent = num;
 	}
 
-
 	public int getJadeEquivalent() {
 		return jadeEquivalent;
 	}
