@@ -24,7 +24,6 @@ public class Buyer extends Agent {
 
 	private static String TAG;
 	private String brokerAgentName;
-	private MessageCreator pCreator;
 
 	protected void setup() {
 		TAG = getName() + " |> ";
@@ -37,24 +36,14 @@ public class Buyer extends Agent {
 		}
 			brokerAgentName = (String) args[0];
 			System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
-
-			pCreator = new MessageCreator(new AID(brokerAgentName, AID.ISLOCALNAME));
-
-			try {
-				publishAuctionItem("Dourade", new Random().nextInt(100), 1, (float) .5, (float) .9);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
 	}
 
 	private void publishAuctionItem(String name, int price, int delay, float step_rise, float step_decrease) throws IOException {
-		ACLMessage msg;
 			AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
 
 			System.out.println(TAG + "Publishing auction item " + item.toString());
 
-			msg = pCreator.createMessageToBroker(Performatifs.V_TO_ANNOUNCE, Optional.of(item));
+			MessageCreator.createMessageToBroker(new AID(brokerAgentName, AID.ISLOCALNAME), Performatifs.V_TO_ANNOUNCE, Optional.of(item));
 			addBehaviour(null);
 			
 	}

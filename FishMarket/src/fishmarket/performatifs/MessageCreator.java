@@ -11,19 +11,13 @@ import jade.lang.acl.*;
 public class MessageCreator {
 
 
-	private final String TAG = "PerformativeCreator |> ";
+	private static final String TAG = "PerformativeCreator |> ";
 
-	private AID brokerAID;
 
-	
-	public MessageCreator(AID brokerAID) {
-		this.brokerAID = brokerAID;
-	}
-
-	public ACLMessage createMessageToBroker(Performatifs perf, Optional<Serializable> content) throws IOException{
+	public static ACLMessage createMessageToBroker(AID receiver, Performatifs perf, Optional<Serializable> content) throws IOException{
 		
 		ACLMessage msg = new ACLMessage(perf.getJadeEquivalent());
-		msg.addReceiver(brokerAID);
+		msg.addReceiver(receiver);
 		msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 
 		if (content.isPresent())

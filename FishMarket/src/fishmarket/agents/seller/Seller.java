@@ -23,7 +23,6 @@ public class Seller extends Agent {
 
 	private static String TAG;
 	private String brokerAgentName;
-	private MessageCreator messageCreator;
 
 	protected void setup() {
 		TAG = getName() + " |> ";
@@ -37,8 +36,6 @@ public class Seller extends Agent {
 
 		brokerAgentName = (String) args[0];
 		System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
-
-		messageCreator = new MessageCreator(new AID(brokerAgentName, AID.ISLOCALNAME));
 
 		try {
 
@@ -57,6 +54,9 @@ public class Seller extends Agent {
 		System.out.println(TAG + "Publishing auction item " + item.toString());
 
 		addBehaviour(new PublishAuctionBehaviour(this,
-				messageCreator.createMessageToBroker(Performatifs.V_TO_ANNOUNCE, Optional.of(item))));
+				MessageCreator.createMessageToBroker(
+						new AID(brokerAgentName, AID.ISLOCALNAME),
+						Performatifs.V_TO_ANNOUNCE,
+						Optional.of(item))));
 	}
 }
