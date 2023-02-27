@@ -1,13 +1,14 @@
 package fishmarket.performatifs;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Optional;
 
-import fishmarket.auction.AuctionItem;
 import jade.core.AID;
 import jade.lang.acl.*;
 
-public class PerformativeCreator {
+public class MessageCreator {
 
 
 	private final String TAG = "PerformativeCreator |> ";
@@ -15,14 +16,19 @@ public class PerformativeCreator {
 	private AID brokerAID;
 
 	
-	public PerformativeCreator(AID brokerAID) {
+	public MessageCreator(AID brokerAID) {
 		this.brokerAID = brokerAID;
 	}
 
-	private ACLMessage createBasicMessage(){
-		ACLMessage msg = new ACLMessage();
+	public ACLMessage createMessageToBroker(Performatifs perf, Optional<Serializable> content) throws IOException{
+		
+		ACLMessage msg = new ACLMessage(perf.getJadeEquivalent());
 		msg.addReceiver(brokerAID);
 		msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+
+		if (content.isPresent())
+			msg.setContentObject(content.get());
+		
 		return msg;
 	}
 
@@ -30,13 +36,6 @@ public class PerformativeCreator {
 	 * VENDEUR
 	 * @throws IOException
 	 */
-	public ACLMessage createToAnnounceMsg(AuctionItem auctionItem) throws IOException {
-		int performative = Performatifs.V_TO_ANNOUNCE.getJadeEquivalent();
-		ACLMessage msg = createBasicMessage();
-		msg.setContentObject(auctionItem);
-		msg.setPerformative(performative);
-		return msg;
-	}
 
 	public ACLMessage createToAttributeMsg() {
 		ACLMessage msg = new ACLMessage(Performatifs.V_TO_ATTRIBUTE.getJadeEquivalent());
@@ -49,12 +48,8 @@ public class PerformativeCreator {
 		return msg;
 	}
 
-	public ACLMessage createRepBidMsg(boolean isOk) {
+	public ACLMessage createRepBidMsg(String isOk) {
 		ACLMessage msg = new ACLMessage(Performatifs.V_REP_BID.getJadeEquivalent());
-		if (isOk)
-			msg.setContent("OK");
-		else
-			msg.setContent("NOK");
 		return msg;
 	}
 

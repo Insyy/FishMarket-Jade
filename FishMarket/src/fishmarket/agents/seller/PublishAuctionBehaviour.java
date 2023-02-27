@@ -4,11 +4,11 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
-public class SellerBehaviour extends AchieveREInitiator {
+public class PublishAuctionBehaviour extends AchieveREInitiator {
 
     private static final String TAG = "SELLER BEHAVIOUR |> ";
 
-    public SellerBehaviour(Agent a, ACLMessage msg) {
+    public PublishAuctionBehaviour(Agent a, ACLMessage msg) {
         super(a, msg);
     }
 
@@ -25,8 +25,10 @@ public class SellerBehaviour extends AchieveREInitiator {
             // FAILURE notification from the JADE runtime: the receiver
             // does not exist
             System.out.println(TAG + "Responder does not exist");
+            done();
         } else {
             System.out.println(TAG + failure.getSender().getName() + " failed to perform the requested action");
+            block(10_000);
         }
     }
 }

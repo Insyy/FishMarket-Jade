@@ -3,8 +3,13 @@ package fishmarket.agents.buyer;
 import jade.core.Agent;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.proto.AchieveREInitiator;
-import java.util.Date;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Random;
+
+import fishmarket.auction.AuctionItem;
+import fishmarket.performatifs.Performatifs;
+import fishmarket.performatifs.MessageCreator;
 
 /**
  * This example shows how to implement the initiator role in
@@ -17,50 +22,40 @@ import java.util.Date;
  */
 public class Buyer extends Agent {
 
-	public static String TAG;
+	private static String TAG;
+	private String brokerAgentName;
+	private MessageCreator pCreator;
 
 	protected void setup() {
 		TAG = getName() + " |> ";
-		// Read names of responders as arguments
+		// Read name of broker as argument
 		Object[] args = getArguments();
-		
-		if (args != null && args.length > 0) {
 
-			System.out.println(TAG + "Name of broker agent is :" + args[0]);
-
-			// Fill the REQUEST message
-			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			for (int i = 0; i < args.length; ++i) {
-				msg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
-			}			// We want to receive a reply in 10 secs
-			msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
-			msg.setContent("Display me please");
-
-			addBehaviour(new AchieveREInitiator(this, msg) {
-				protected void handleInform(ACLMessage inform) {
-					System.out.println(
-							TAG + inform.getSender().getName() + " successfully performed the requested action");
-					System.out.println(TAG + "INFORM: " + inform.getContent());
-				}
-
-				protected void handleRefuse(ACLMessage refuse) {
-					System.out.println(TAG + refuse.getSender().getName() + " refused to perform the requested action");
-				}
-
-				protected void handleFailure(ACLMessage failure) {
-					if (failure.getSender().equals(myAgent.getAMS())) {
-						// FAILURE notification from the JADE runtime: the receiver
-						// does not exist
-						System.out.println(TAG + "Responder does not exist");
-					} else {
-						System.out.println(
-								TAG + failure.getSender().getName() + " failed to perform the requested action");
-					}
-				}
-
-			});
-		} else {
-			System.out.println("INITIATOR No responder specified.");
+		if (!(args != null && args.length > 0)) {
+			System.out.println(TAG + "No broker name specified.");
+			return;
 		}
+			brokerAgentName = (String) args[0];
+			System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
+
+			pCreator = new MessageCreator(new AID(brokerAgentName, AID.ISLOCALNAME));
+
+			try {
+				publishAuctionItem("Dourade", new Random().nextInt(100), 1, (float) .5, (float) .9);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+	}
+
+	private void publishAuctionItem(String name, int price, int delay, float step_rise, float step_decrease) throws IOException {
+		ACLMessage msg;
+			AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
+
+			System.out.println(TAG + "Publishing auction item " + item.toString());
+
+			msg = pCreator.createMessageToBroker(Performatifs.V_TO_ANNOUNCE, Optional.of(item));
+			addBehaviour(null);
+			
 	}
 }

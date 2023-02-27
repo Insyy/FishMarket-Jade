@@ -8,7 +8,7 @@ public class AuctionInstance {
     private AuctionItem item;
     private List<AID> buyers;
     private AID seller;
-    private boolean isActive = true;
+    private boolean isActive = false;
 
     public AuctionInstance(AuctionItem item, AID seller) {
         this.item = item;
