@@ -10,19 +10,10 @@ import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
 import fishmarket.performatifs.MessageCreator;
 
-/**
- * This example shows how to implement the initiator role in
- * a FIPA-request interaction protocol. In this case in particular
- * we use an <code>AchieveREInitiator</code> ("Achieve Rational effect")
- * to request a dummy action to a number of agents (whose local
- * names must be specified as arguments).
- * 
- * @author Giovanni Caire - TILAB
- */
 public class Seller extends Agent {
 
 	private static String TAG;
-	private String brokerAgentName;
+	private AID broker;
 
 	protected void setup() {
 		TAG = getName() + " |> ";
@@ -31,11 +22,11 @@ public class Seller extends Agent {
 
 		if (!(args != null && args.length > 0)) {
 			System.out.println(TAG + "No broker name specified.");
-			return;
+			this.takeDown();
 		}
 
-		brokerAgentName = (String) args[0];
-		System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
+		broker = new AID(String.valueOf(args[0]), AID.ISLOCALNAME);
+		System.out.println(TAG + "Name of broker agent is " + broker.getName());
 
 		try {
 
@@ -55,7 +46,7 @@ public class Seller extends Agent {
 
 		addBehaviour(new PublishAuctionBehaviour(this,
 				MessageCreator.createMessageToBroker(
-						new AID(brokerAgentName, AID.ISLOCALNAME),
+						broker,
 						Performatifs.V_TO_ANNOUNCE,
 						Optional.of(item))));
 	}

@@ -1,29 +1,16 @@
 package fishmarket.agents.buyer;
 
 import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Random;
-
+import java.util.ArrayList;
+import java.util.List;
 import fishmarket.auction.AuctionItem;
-import fishmarket.performatifs.Performatifs;
-import fishmarket.performatifs.MessageCreator;
 
-/**
- * This example shows how to implement the initiator role in
- * a FIPA-request interaction protocol. In this case in particular
- * we use an <code>AchieveREInitiator</code> ("Achieve Rational effect")
- * to request a dummy action to a number of agents (whose local
- * names must be specified as arguments).
- * 
- * @author Giovanni Caire - TILAB
- */
 public class Buyer extends Agent {
 
 	private static String TAG;
 	private String brokerAgentName;
+
+	List<AuctionItem> items = new ArrayList<>();
 
 	protected void setup() {
 		TAG = getName() + " |> ";
@@ -36,15 +23,5 @@ public class Buyer extends Agent {
 		}
 			brokerAgentName = (String) args[0];
 			System.out.println(TAG + "Name of broker agent is " + brokerAgentName);
-	}
-
-	private void publishAuctionItem(String name, int price, int delay, float step_rise, float step_decrease) throws IOException {
-			AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
-
-			System.out.println(TAG + "Publishing auction item " + item.toString());
-
-			MessageCreator.createMessageToBroker(new AID(brokerAgentName, AID.ISLOCALNAME), Performatifs.V_TO_ANNOUNCE, Optional.of(item));
-			addBehaviour(null);
-			
 	}
 }

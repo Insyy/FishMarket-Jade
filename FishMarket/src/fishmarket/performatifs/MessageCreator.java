@@ -10,10 +10,6 @@ import jade.lang.acl.*;
 
 public class MessageCreator {
 
-
-	private static final String TAG = "PerformativeCreator |> ";
-
-
 	public static ACLMessage createMessageToBroker(AID receiver, Performatifs perf, Optional<Serializable> content) throws IOException{
 		
 		ACLMessage msg = new ACLMessage(perf.getJadeEquivalent());
@@ -24,43 +20,4 @@ public class MessageCreator {
 			msg.setContentObject(content.get());
 		return msg;
 	}
-
-	/**
-	 * VENDEUR
-	 * @throws IOException
-	 */
-	public ACLMessage createToAttributeMsg() {
-		ACLMessage msg = new ACLMessage(Performatifs.V_TO_ATTRIBUTE.getJadeEquivalent());
-		return msg;
-	}
-
-	public ACLMessage createToGiveMsg(String description) {
-		ACLMessage msg = new ACLMessage(Performatifs.V_TO_GIVE.getJadeEquivalent());
-		msg.setContent(description);
-		return msg;
-	}
-
-	public ACLMessage createRepBidMsg(String isOk) {
-		ACLMessage msg = new ACLMessage(Performatifs.V_REP_BID.getJadeEquivalent());
-		return msg;
-	}
-
-	/**
-	 * PRENEUR
-	 */
-
-	public ACLMessage createToBidMsg() {
-		ACLMessage msg = new ACLMessage(Performatifs.P_TO_BID.getJadeEquivalent());
-		return msg;
-	}
-
-	public ACLMessage createToPayMsg() {
-		ACLMessage msg = new ACLMessage(Performatifs.P_TO_PAY.getJadeEquivalent());
-		return msg;
-	}
-
-	/**
-	 * BROKER
-	 */
-
 }
