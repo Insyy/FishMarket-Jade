@@ -1,12 +1,14 @@
 package fishmarket.auction;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * AuctionItem
  */
 public class AuctionItem implements Serializable {
 
+    private UUID id;
     private String name;
     private int price;
     private int delay;
@@ -14,11 +16,12 @@ public class AuctionItem implements Serializable {
     private float step_decrease;
 
     public String[] toStringArrayGUI(String vendor) {
-        return new String[] { vendor, name, String.valueOf(price)};
+        return new String[] { vendor, name, String.valueOf(price) };
 
     }
 
     public AuctionItem(String name, int price, int delay, float step_rise, float step_decrease) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.delay = delay;
@@ -56,5 +59,8 @@ public class AuctionItem implements Serializable {
                 + ", step_decrease=" + step_decrease + "]";
     }
 
-    
+    public UUID getId() {
+        return id;
+    }
+
 }

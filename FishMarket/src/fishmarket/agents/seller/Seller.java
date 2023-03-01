@@ -45,9 +45,10 @@ public class Seller extends Agent {
 		System.out.println(TAG + "Publishing auction item " + item.toString());
 
 		addBehaviour(new PublishAuctionBehaviour(this,
-				MessageCreator.createMessageToBroker(
+				MessageCreator.createMessageToAgent(
 						broker,
 						Performatifs.V_TO_ANNOUNCE,
-						Optional.of(item))));
+						Optional.of(item),
+						Optional.empty())));
 	}
 }
