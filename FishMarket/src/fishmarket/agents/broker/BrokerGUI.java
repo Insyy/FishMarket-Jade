@@ -48,13 +48,18 @@ public class BrokerGUI extends JTable {
             }
 
             private void processRow(JTable table, int row, BrokerTableModel brokerTableModel) {
-                if (!brokerTableModel.isRowActive(row)) {
-                    setBackground(brokerTableModel.ROW_INACTIVE_COLOR);
-                    setForeground(Color.WHITE);
-                } else {
-                    setBackground(this.getBackground());
-                    setForeground(this.getForeground());
+                try {
+                    if (!brokerTableModel.isRowActive(row)) {
+                        setBackground(brokerTableModel.ROW_INACTIVE_COLOR);
+                        setForeground(Color.WHITE);
+                    } else {
+                        setBackground(this.getBackground());
+                        setForeground(this.getForeground());
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
                 }
+                
             }
         });
     }
@@ -75,13 +80,9 @@ public class BrokerGUI extends JTable {
                     columnNames);
         }
 
-        public boolean isRowActive(int row) {
+        public boolean isRowActive(int row) throws IndexOutOfBoundsException {
             boolean b = true;
-            try {
-                b = rowStates.get(row);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
+            b = rowStates.get(row);
             return b;
         }
 

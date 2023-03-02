@@ -1,14 +1,14 @@
-package fishmarket.agents.buyer.behaviours;
+package fishmarket.agents.buyer;
 
 import java.io.IOException;
 import java.util.Optional;
 
-import fishmarket.agents.buyer.Buyer;
-import fishmarket.agents.buyer.TooBrokeException;
 import fishmarket.auction.AuctionInstance;
+import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.MessageCreator;
 import fishmarket.performatifs.Performatifs;
 import jade.core.Agent;
+import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -18,7 +18,7 @@ import jade.proto.AchieveREResponder;
 
 public class ListenForAuction extends AchieveREResponder {
 
-    private String TAG = "BROKER BEHAVIOUR |> ";
+    private String TAG = "LISTENFORAUCTION BEHAVIOUR |> ";
 
     public ListenForAuction(Agent a, MessageTemplate mt) {
         super(a, mt);
@@ -28,7 +28,7 @@ public class ListenForAuction extends AchieveREResponder {
     protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
 
         getAgent().addBehaviour(new ListenForAuction(getAgent(), null));
-        System.out.println(TAG + " Handle request");
+        //System.out.println(TAG + " Handle request");
 
         int jadePerformative = request.getPerformative();
         if (jadePerformative == Performatifs.V_TO_ANNOUNCE.getJadeEquivalent())
@@ -43,11 +43,25 @@ public class ListenForAuction extends AchieveREResponder {
     }
 
     private ACLMessage toAnnounceHandler(ACLMessage request) throws UnreadableException, IOException, TooBrokeException {
-        AuctionInstance auctionInstance = (AuctionInstance) request.getContentObject();
+        AuctionItem auctionItem = (AuctionItem) request.getContentObject();
 
-        if (auctionInstance.getItem().getPrice() < ((Buyer) getAgent()).getMoneyLeft()) {
-            return MessageCreator.createMessageToAgent(request.getSender(), Performatifs.P_TO_BID, Optional.empty(),
-            Optional.empty());
+        if (auctionItem.getPrice() < ((Buyer) getAgent()).getMoneyLeft()) {
+            System.out.println("Buyer " + getAgent().getName() + " bidded on auction " + auctionItem.toString());
+            return MessageCreator.createMessageToAgent(request.getSender(), Performatifs.P_TO_BID, Optional.empty(), Optional.empty());
         } else throw new TooBrokeException();        
     }
+
+    @Override
+    protected ACLMessage prepareResponse(ACLMessage request) throws NotUnderstoodException, RefuseException {
+        // TODO Auto-generated method stub
+        return super.prepareResponse(request);
+    }
+
+    @Override
+    protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
+        // TODO Auto-generated method stub
+        return super.prepareResultNotification(request, response);
+    }
+
+    
 }

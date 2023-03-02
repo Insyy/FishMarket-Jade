@@ -4,11 +4,11 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
-public class PublishAuctionBehaviour extends AchieveREInitiator {
+public class PublishAuctionBehavior extends AchieveREInitiator {
 
     private static final String TAG = "SELLER BEHAVIOUR |> ";
 
-    public PublishAuctionBehaviour(Agent a, ACLMessage msg) {
+    public PublishAuctionBehavior(Agent a, ACLMessage msg) {
         super(a, msg);
     }
 

@@ -1,20 +1,28 @@
 package fishmarket.agents.broker;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import fishmarket.agents.buyer.Buyer;
 import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
+import fishmarket.performatifs.MessageCreator;
+import fishmarket.performatifs.Performatifs;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.WakerBehaviour;
 
 public class Broker extends Agent {
 
     public static String TAG;
 
     private BrokerGUI brokerGUI = new BrokerGUI();
+    
+    private WakerBehaviour waker = null;
 
-    private final List<AID> vendors = new ArrayList<>();
+    private final List<AID> buyers = new ArrayList<>();
     private final List<AuctionInstance> auctions = new ArrayList<>();
 
     @Override
@@ -26,7 +34,7 @@ public class Broker extends Agent {
 
         if (args != null && args.length > 0)
             for (Object object : args) {
-                vendors.add(new AID(String.valueOf(object), AID.ISLOCALNAME));
+                buyers.add(new AID(String.valueOf(object), AID.ISLOCALNAME));
             }
 
         addBehaviour(new WaitForSeller(this, null));
@@ -36,4 +44,16 @@ public class Broker extends Agent {
         auctions.add(new AuctionInstance(item, seller));
         brokerGUI.recreateGUI(auctions);
     }
+
+    public void sendLastAuctionItemToBuyers() throws IOException {
+        if (auctions.isEmpty()) return;
+        for (AID buyerAID : buyers) {
+            send(MessageCreator.createMessageToAgent(buyerAID, Performatifs.V_TO_ANNOUNCE,Optional.of(auctions.get(auctions.size() - 1).getItem()), Optional.empty()));   
+        }
+    }
+
+    public AuctionInstance getLastAuctionInstance() throws IndexOutOfBoundsException {
+        return auctions.get(auctions.size() - 1);
+    }
+
 }

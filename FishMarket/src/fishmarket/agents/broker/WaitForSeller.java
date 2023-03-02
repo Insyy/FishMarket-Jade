@@ -1,8 +1,11 @@
 package fishmarket.agents.broker;
 
+import java.io.IOException;
+
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
 import jade.core.Agent;
+import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -23,23 +26,40 @@ public class WaitForSeller extends AchieveREResponder {
 
         getAgent().addBehaviour(new WaitForSeller(getAgent(), null));
 
-        System.out.println(TAG + " Handle request");
-
+        // System.out.println(TAG + " Handle request");
         int jadePerformative = request.getPerformative();
         if (jadePerformative == Performatifs.V_TO_ANNOUNCE.getJadeEquivalent())
             try {
                 return toAnnounceHandler(request);
-            } catch (UnreadableException e) {
+            } catch (UnreadableException | IOException e) {
+                e.printStackTrace();
                 return super.handleRequest(request);
             }
-
         return super.handleRequest(request);
     }
 
-    private ACLMessage toAnnounceHandler(ACLMessage request) throws UnreadableException {
-            ((Broker) getAgent()).createAuctionInstance((AuctionItem) request.getContentObject(), request.getSender());
+    private ACLMessage toAnnounceHandler(ACLMessage request) throws UnreadableException, IOException {
+
+        ((Broker) getAgent()).createAuctionInstance((AuctionItem) request.getContentObject(), request.getSender());
+        getAgent().addBehaviour(new EndOfAuctionWaitTime(myAgent, ((Broker) getAgent()).getLastAuctionInstance()));
         ACLMessage msg = request.createReply();
         msg.setPerformative(ACLMessage.INFORM);
+        ((Broker) getAgent()).sendLastAuctionItemToBuyers();
         return msg;
     }
+
+    @Override
+    protected ACLMessage prepareResponse(ACLMessage request) throws NotUnderstoodException, RefuseException {
+        // TODO Auto-generated method stub
+        return super.prepareResponse(request);
+    }
+
+    @Override
+    protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
+        // TODO Auto-generated method stub
+        return super.prepareResultNotification(request, response);
+    }
+
+    
+
 }

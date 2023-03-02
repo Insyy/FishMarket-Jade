@@ -30,7 +30,7 @@ public class Seller extends Agent {
 
 		try {
 
-			publishAuctionItem("Dourade", new Random().nextInt(100), 1, (float) .5, (float) .9);
+			publishAuctionItem("Dourade", new Random().nextInt(100), 5, (float) .5, (float) .9);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,7 +44,7 @@ public class Seller extends Agent {
 
 		System.out.println(TAG + "Publishing auction item " + item.toString());
 
-		addBehaviour(new PublishAuctionBehaviour(this,
+		addBehaviour(new PublishAuctionBehavior(this,
 				MessageCreator.createMessageToAgent(
 						broker,
 						Performatifs.V_TO_ANNOUNCE,

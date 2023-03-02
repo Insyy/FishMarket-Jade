@@ -55,8 +55,8 @@ public class AuctionItem implements Serializable {
 
     @Override
     public String toString() {
-        return "AuctionItem [name=" + name + ", price=" + price + ", delay=" + delay + ", step_rise=" + step_rise
-                + ", step_decrease=" + step_decrease + "]";
+        return "AuctionItem [id=" + id + ", name=" + name + ", price=" + price + ", delay=" + delay + ", step_rise="
+                + step_rise + ", step_decrease=" + step_decrease + "]";
     }
 
     public UUID getId() {

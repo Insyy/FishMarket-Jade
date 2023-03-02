@@ -4,7 +4,6 @@ import jade.core.Agent;
 import java.util.ArrayList;
 import java.util.List;
 
-import fishmarket.agents.buyer.behaviours.ListenForAuction;
 import fishmarket.auction.AuctionInstance;
 
 public class Buyer extends Agent {
@@ -23,8 +22,6 @@ public class Buyer extends Agent {
 	public Integer getMoneyLeft() {
 		return moneyLeft;
 	}
-
-	
 
 	public void setMoneyLeft(Integer moneyLeft) {
 		this.moneyLeft = moneyLeft;

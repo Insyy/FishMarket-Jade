@@ -1,4 +1,4 @@
-package fishmarket.agents.buyer.behaviours;
+package fishmarket.agents.buyer;
 
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
