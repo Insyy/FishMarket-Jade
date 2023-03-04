@@ -35,8 +35,7 @@ public class BuyerGUI extends JFrame {
     private JFormattedTextField initialAmountText = new JFormattedTextField(NumberFormat.getInstance());
 
     //TABLE PANEL
-    private JPanel tablePanel = new JPanel(); 
-    private JScrollPane scrollPane = new JScrollPane();
+    private JScrollPane scrollPane;
     private JTable table;
 
     //BOTTOM PANEL
@@ -69,9 +68,7 @@ public class BuyerGUI extends JFrame {
         table = new JTable(new BuyerTableModel());
         configureTableSettings();
 
-        scrollPane.add(table);
-        tablePanel.add(scrollPane);
-
+        scrollPane = new JScrollPane(table);
         //BOTTOM PANEL
         bottomPanel.add(subscribeToAuctionBtn);
         bottomPanel.add(bidBtn);
@@ -79,7 +76,7 @@ public class BuyerGUI extends JFrame {
         wholePanel = new JPanel();
         wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.Y_AXIS));
         wholePanel.add(topPanel);
-        wholePanel.add(tablePanel);
+        wholePanel.add(scrollPane);
         wholePanel.add(bottomPanel);
 
         getContentPane().add(wholePanel);

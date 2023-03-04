@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.SwingUtilities;
+
 import fishmarket.auction.AuctionItem;
 
 public class Buyer extends Agent {
@@ -14,7 +16,7 @@ public class Buyer extends Agent {
 	private static final List<AuctionItem> auctions = new ArrayList<>();
 	private static final List<UUID> wonAuctionsUUID = new ArrayList<>();
 
-	BuyerGUI gui = new BuyerGUI();
+	BuyerGUI gui;
 
 	Integer moneyLeft;
 
@@ -33,7 +35,17 @@ public class Buyer extends Agent {
 	protected void setup() {
 		TAG = getName() + " |> ";
 
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+			  @Override
+			  public void run() {
+				gui = new BuyerGUI();
+				gui.refreshTableData(auctions, wonAuctionsUUID);
+			  }
+			});
+		}
 		
+
 		moneyLeft = Integer.valueOf((String.valueOf(getArguments()[0])));
 
 
