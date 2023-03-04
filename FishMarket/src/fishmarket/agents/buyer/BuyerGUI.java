@@ -23,32 +23,71 @@ import fishmarket.auction.AuctionItem;
 public class BuyerGUI extends JFrame {
 
 
+    private static class BuyerTableModel extends DefaultTableModel {
+
+        private final static String columnNames[] = { "Description", "Current price" };
+        private final Color ROW_WON_BID_COLOR = Color.GREEN;
+
+        private List<AuctionItem> auctions = new ArrayList<>();
+        private List<UUID> auctionsWon = new ArrayList<>();
+
+        BuyerTableModel() {
+            super(new Object[][] {},
+                    columnNames);
+        }
+
+        public boolean isRowWon(final int row) throws IndexOutOfBoundsException {
+            if (auctions == null || auctions.size() < row)
+                return false;
+            return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getId().equals(uuid));
+        }
+
+        
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+        public void refreshTableData(final List<AuctionItem> auctions, final List<UUID> auctionsWon) {
+
+            System.out.println("Refreshing table with data from " + auctions);
+
+            this.auctions = auctions;
+            this.auctionsWon = auctionsWon;
+
+            getDataVector().removeAllElements();
+            auctions.forEach(auction -> {
+                addRow(auction.toStringArrayGUI(null));
+            });
+            System.out.println(getRowCount() + " rows found");
+            fireTableDataChanged();
+        }
+    }
+
     private final static String title = "Buyer's view of the market";
 
     private JPanel wholePanel = new JPanel();
-
     //TOP PANEL
-    private JPanel topPanel = new JPanel();
-    private JButton automaticStartBtn = new JButton("Start in automatic mode");
-    private JButton manualStartBtn = new JButton("Start in manual mode");
-    private JLabel initialAmountLabel = new JLabel("Initial amount (EUR): ");
-    private JFormattedTextField initialAmountText = new JFormattedTextField(NumberFormat.getInstance());
+    private final JPanel topPanel = new JPanel();
+    private final JButton automaticStartBtn = new JButton("Start in automatic mode");
+    private final JButton manualStartBtn = new JButton("Start in manual mode");
+    private final JLabel initialAmountLabel = new JLabel("Initial amount (EUR): ");
 
+    private final JFormattedTextField initialAmountText = new JFormattedTextField(NumberFormat.getInstance());
     //TABLE PANEL
     private JScrollPane scrollPane;
-    private JTable table;
 
+    private JTable table;
     //BOTTOM PANEL
-    private JPanel bottomPanel = new JPanel();
-    private JButton subscribeToAuctionBtn = new JButton("Subscribe to selected auction(s)");
-    private JButton bidBtn = new JButton("Bid on selected auction");
+    private final JPanel bottomPanel = new JPanel();
+    private final JButton subscribeToAuctionBtn = new JButton("Subscribe to selected auction(s)");
+
+    private final JButton bidBtn = new JButton("Bid on selected auction");
 
     public BuyerGUI() {
         super(title);
 
-        createGUI();
-        configureTableSettings();
-        
+        createGUI();        
     }
 
     public void createGUI() {
@@ -73,7 +112,6 @@ public class BuyerGUI extends JFrame {
         bottomPanel.add(subscribeToAuctionBtn);
         bottomPanel.add(bidBtn);
 
-        wholePanel = new JPanel();
         wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.Y_AXIS));
         wholePanel.add(topPanel);
         wholePanel.add(scrollPane);
@@ -86,20 +124,30 @@ public class BuyerGUI extends JFrame {
 
     }
 
+    public void refreshTableData(final List<AuctionItem> auctions, final List<UUID> auctionsWon) {
+        ((BuyerTableModel) table.getModel()).refreshTableData(auctions, auctionsWon);
+    }
+
     private void configureTableSettings() {
+
+        
+        table.setCellSelectionEnabled(false);
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
 
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,
+                    final boolean hasFocus, final int row, final int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 processRow(table, row, (BuyerTableModel) table.getModel());
                 return this;
             }
 
-            private void processRow(JTable table, int row, BuyerTableModel sellerTableModel) {
+            private void processRow(final JTable table, final int row, final BuyerTableModel sellerTableModel) {
                 try {
                     if (sellerTableModel.isRowWon(row)) {
                         setBackground(sellerTableModel.ROW_WON_BID_COLOR);
@@ -108,45 +156,10 @@ public class BuyerGUI extends JFrame {
                         setBackground(this.getBackground());
                         setForeground(this.getForeground());
                     }
-                } catch (IndexOutOfBoundsException e) {
+                } catch (final IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
             }
         });
-    }
-
-    public void refreshTableData(List<AuctionItem> auctions, List<UUID> auctionsWon) {
-        ((BuyerTableModel) table.getModel()).refreshTableData(auctions, auctionsWon);
-    }
-
-    private static class BuyerTableModel extends DefaultTableModel {
-
-        private final static String columnNames[] = { "Description", "Current price" };
-        private final Color ROW_WON_BID_COLOR = Color.GREEN;
-
-        private List<AuctionItem> auctions = new ArrayList<>();
-        private List<UUID> auctionsWon = new ArrayList<>();
-
-        BuyerTableModel() {
-            super(new Object[][] {},
-                    columnNames);
-        }
-
-        public boolean isRowWon(int row) throws IndexOutOfBoundsException {
-            if (auctions == null || auctions.size() < row)
-                return false;
-                return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getId().equals(uuid));
-        }
-
-        public void refreshTableData(List<AuctionItem> auctions, List<UUID> auctionsWon) {
-
-            this.auctionsWon = auctionsWon;
-
-            getDataVector().removeAllElements();
-            auctions.forEach(auction -> {
-                addRow(auction.toStringArrayGUI(null));
-            });
-            fireTableDataChanged();
-        }
     }
 }

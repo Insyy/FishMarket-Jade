@@ -16,6 +16,10 @@ public class Buyer extends Agent {
 	private static final List<AuctionItem> auctions = new ArrayList<>();
 	private static final List<UUID> wonAuctionsUUID = new ArrayList<>();
 
+	public static List<UUID> getWonAuctionsUUID() {
+		return wonAuctionsUUID;
+	}
+
 	BuyerGUI gui;
 
 	Integer moneyLeft;
@@ -28,8 +32,13 @@ public class Buyer extends Agent {
 		return moneyLeft;
 	}
 
-	public void setMoneyLeft(Integer moneyLeft) {
+	public void setMoneyLeft(final Integer moneyLeft) {
 		this.moneyLeft = moneyLeft;
+	}
+
+	public void addAuction(final AuctionItem auction) {
+		auctions.add(auction);
+		gui.refreshTableData(auctions, wonAuctionsUUID);
 	}
 
 	protected void setup() {
@@ -40,7 +49,6 @@ public class Buyer extends Agent {
 			  @Override
 			  public void run() {
 				gui = new BuyerGUI();
-				gui.refreshTableData(auctions, wonAuctionsUUID);
 			  }
 			});
 		}
@@ -51,15 +59,6 @@ public class Buyer extends Agent {
 
 		// Read name of broker as argument
 		addBehaviour(new ListenForAuction(this, null));
-	}
-
-	public static List<UUID> getWonAuctionsUUID() {
-		return wonAuctionsUUID;
-	}
-
-	public void addAuction(AuctionItem auction) {
-		auctions.add(auction);
-		gui.refreshTableData(auctions, wonAuctionsUUID);
 	}
 
 

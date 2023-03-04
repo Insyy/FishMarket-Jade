@@ -15,7 +15,38 @@ import fishmarket.auction.AuctionInstance;
 
 public class BrokerGUI extends JTable {
 
-    private JFrame frame;
+    private static class BrokerTableModel extends DefaultTableModel {
+
+        private final static String columnNames[] = { "Vendeur", "Nom du lot", "Montant courant de l'enchere" };
+        private List<Boolean> rowStates = new ArrayList<>();
+
+        private final Color ROW_INACTIVE_COLOR = Color.BLACK;
+
+        BrokerTableModel() {
+            super(new Object[][] {},
+                    columnNames);
+        }
+
+        public boolean isRowActive(final int row) throws IndexOutOfBoundsException {
+            if (rowStates.size() < row)
+                return false;
+            return rowStates.get(row);
+        }
+
+        public void refreshTableData(final List<AuctionInstance> auctions) {
+            getDataVector().removeAllElements();
+            rowStates.clear();
+            for (int i = 0; i < auctions.size(); i++) {
+                final AuctionInstance auction = auctions.get(i);
+
+                addRow(auction.getItem().toStringArrayGUI(auction.getSeller().getName()));
+                rowStates.add(auction.isActive());
+            }
+            fireTableDataChanged();
+        }
+    }
+
+    private final JFrame frame;
 
     private final String title = "Broker's view of the market";
 
@@ -25,7 +56,7 @@ public class BrokerGUI extends JTable {
         configureInitialSettings();
 
         // Add the table to a scroll pane
-        JScrollPane scrollPane = new JScrollPane(this);
+        final JScrollPane scrollPane = new JScrollPane(this);
 
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,69 +66,38 @@ public class BrokerGUI extends JTable {
         frame.setVisible(true);
     }
 
+    public void recreateGUI(final List<AuctionInstance> auctions) {
+        ((BrokerTableModel) this.getModel()).refreshTableData(auctions);
+    }
+
     private void configureInitialSettings() {
         this.setFillsViewportHeight(true);
         this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         this.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,
+                    final boolean hasFocus, final int row, final int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 processRow(table, row, (BrokerTableModel) table.getModel());
                 return this;
             }
 
-            private void processRow(JTable table, int row, BrokerTableModel brokerTableModel) {
+            private void processRow(final JTable table, final int row, final BrokerTableModel brokerTableModel) {
                 try {
                     if (!brokerTableModel.isRowActive(row)) {
                         setBackground(brokerTableModel.ROW_INACTIVE_COLOR);
                         setForeground(Color.WHITE);
+                        
                     } else {
                         setBackground(this.getBackground());
                         setForeground(this.getForeground());
                     }
-                } catch (IndexOutOfBoundsException e) {
+                } catch (final IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
                 
             }
         });
-    }
-
-    public void recreateGUI(List<AuctionInstance> auctions) {
-        ((BrokerTableModel) this.getModel()).refreshTableData(auctions);
-    }
-
-    private static class BrokerTableModel extends DefaultTableModel {
-
-        private final static String columnNames[] = { "Vendeur", "Nom du lot", "Montant courant de l'enchere" };
-        private List<Boolean> rowStates;
-
-        private final Color ROW_INACTIVE_COLOR = Color.RED;
-
-        BrokerTableModel() {
-            super(new Object[][] {},
-                    columnNames);
-        }
-
-        public boolean isRowActive(int row) throws IndexOutOfBoundsException {
-            boolean b = true;
-            b = rowStates.get(row);
-            return b;
-        }
-
-        public void refreshTableData(List<AuctionInstance> auctions) {
-            getDataVector().removeAllElements();
-            rowStates = new ArrayList<>();
-
-            for (int i = 0; i < auctions.size(); i++) {
-                AuctionInstance auction = auctions.get(i);
-
-                addRow(auction.getItem().toStringArrayGUI(auction.getSeller().getName()));
-                rowStates.add(auction.isActive());
-            }
-            fireTableDataChanged();
-        }
     }
 
 }

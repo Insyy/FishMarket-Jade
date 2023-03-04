@@ -18,7 +18,7 @@ public class Seller extends Agent {
 	protected void setup() {
 		TAG = getName() + " |> ";
 		// Read name of broker as argument
-		Object[] args = getArguments();
+		final Object[] args = getArguments();
 
 		if (!(args != null && args.length > 0)) {
 			System.out.println(TAG + "No broker name specified.");
@@ -32,15 +32,15 @@ public class Seller extends Agent {
 
 			publishAuctionItem("Dourade", new Random().nextInt(100), 5, (float) .5, (float) .9);
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void publishAuctionItem(String name, int price, int delay, float step_rise, float step_decrease)
+	private void publishAuctionItem(final String name, final int price, final int delay, final float step_rise, final float step_decrease)
 			throws IOException {
 
-		AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
+		final AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
 
 		System.out.println(TAG + "Publishing auction item " + item.toString());
 

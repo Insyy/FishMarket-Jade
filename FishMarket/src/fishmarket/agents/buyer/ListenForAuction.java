@@ -17,19 +17,19 @@ import jade.proto.AchieveREResponder;
 
 public class ListenForAuction extends AchieveREResponder {
 
-    private String TAG = "LISTENFORAUCTION BEHAVIOUR |> ";
+    private final String TAG = "LISTENFORAUCTION BEHAVIOUR |> ";
 
-    public ListenForAuction(Agent a, MessageTemplate mt) {
+    public ListenForAuction(final Agent a, final MessageTemplate mt) {
         super(a, mt);
     }
 
     @Override
-    protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+    protected ACLMessage handleRequest(final ACLMessage request) throws NotUnderstoodException, RefuseException {
 
         getAgent().addBehaviour(new ListenForAuction(getAgent(), null));
         //System.out.println(TAG + " Handle request");
 
-        int jadePerformative = request.getPerformative();
+        final int jadePerformative = request.getPerformative();
         if (jadePerformative == Performatifs.V_TO_ANNOUNCE.getJadeEquivalent())
             try {
                 return toAnnounceHandler(request);
@@ -41,8 +41,21 @@ public class ListenForAuction extends AchieveREResponder {
         return super.handleRequest(request);
     }
 
-    private ACLMessage toAnnounceHandler(ACLMessage request) throws UnreadableException, IOException, TooBrokeException {
-        AuctionItem auctionItem = (AuctionItem) request.getContentObject();
+    @Override
+    protected ACLMessage prepareResponse(final ACLMessage request) throws NotUnderstoodException, RefuseException {
+        return request;
+        
+    }
+
+
+    @Override
+    protected ACLMessage prepareResultNotification(final ACLMessage request, final ACLMessage response) throws FailureException {
+        return response;
+        
+    }
+
+    private ACLMessage toAnnounceHandler(final ACLMessage request) throws UnreadableException, IOException, TooBrokeException {
+        final AuctionItem auctionItem = (AuctionItem) request.getContentObject();
 
         ((Buyer) getAgent()).addAuction(auctionItem);
 
@@ -50,19 +63,6 @@ public class ListenForAuction extends AchieveREResponder {
             System.out.println("Buyer " + getAgent().getName() + " bidded on auction " + auctionItem.toString());
             return MessageCreator.createMessageToAgent(request.getSender(), Performatifs.P_TO_BID, Optional.empty(), Optional.empty());
         } else throw new TooBrokeException();        
-    }
-
-
-    @Override
-    protected ACLMessage prepareResponse(ACLMessage request) throws NotUnderstoodException, RefuseException {
-        return request;
-        
-    }
-
-    @Override
-    protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
-        return response;
-        
     }
 
     
