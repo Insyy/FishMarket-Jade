@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.swing.SwingUtilities;
+
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
 import fishmarket.performatifs.MessageCreator;
@@ -14,11 +16,23 @@ public class Seller extends Agent {
 
 	private static String TAG;
 	private AID broker;
+	
+	SellerGUI gui;
 
 	protected void setup() {
 		TAG = getName() + " |> ";
 		// Read name of broker as argument
-		final Object[] args = getArguments();
+
+			SwingUtilities.invokeLater(new Runnable() {
+			  @Override
+			  public void run() {
+				gui = new SellerGUI();
+				//gui.refreshTableData(auctions, wonAuctionsUUID);
+			  }
+			});
+		
+
+		Object[] args = getArguments();
 
 		if (!(args != null && args.length > 0)) {
 			System.out.println(TAG + "No broker name specified.");
@@ -50,5 +64,6 @@ public class Seller extends Agent {
 						Performatifs.V_TO_ANNOUNCE,
 						Optional.of(item),
 						Optional.empty())));
+
 	}
 }

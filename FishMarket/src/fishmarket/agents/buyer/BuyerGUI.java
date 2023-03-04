@@ -107,14 +107,16 @@ public class BuyerGUI extends JFrame {
         table = new JTable(new BuyerTableModel());
         configureTableSettings();
 
-        scrollPane = new JScrollPane(table);
+        scrollPane.add(table);
+        tablePanel.add(scrollPane);
+
         //BOTTOM PANEL
         bottomPanel.add(subscribeToAuctionBtn);
         bottomPanel.add(bidBtn);
 
         wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.Y_AXIS));
         wholePanel.add(topPanel);
-        wholePanel.add(scrollPane);
+        wholePanel.add(tablePanel);
         wholePanel.add(bottomPanel);
 
         getContentPane().add(wholePanel);
