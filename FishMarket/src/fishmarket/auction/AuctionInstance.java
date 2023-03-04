@@ -49,13 +49,18 @@ public class AuctionInstance {
         this.isActive = isActive;
     }
 
+    
+
+
     private class BuyerAlreadyExistsException extends Exception {}
 
     private class BuyerNotPresentException extends Exception {}
 
     @Override
     public String toString() {
-        return "AuctionInstance [item=" + item + ", buyers=" + buyers + ", seller=" + seller + ", isActive=" + isActive
-                + "]";
+        return "AuctionInstance [item=" + item + ", buyers=" + buyers + ", seller=" + seller + ", isActive=" + isActive + "]";
     }
+
+    
+    
 }

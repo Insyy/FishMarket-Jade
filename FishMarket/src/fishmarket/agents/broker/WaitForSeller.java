@@ -50,14 +50,14 @@ public class WaitForSeller extends AchieveREResponder {
 
     @Override
     protected ACLMessage prepareResponse(ACLMessage request) throws NotUnderstoodException, RefuseException {
-        // TODO Auto-generated method stub
-        return super.prepareResponse(request);
+        return request;
+        
     }
 
     @Override
     protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
-        // TODO Auto-generated method stub
-        return super.prepareResultNotification(request, response);
+        return response;
+        
     }
 
     

@@ -3,7 +3,6 @@ package fishmarket.agents.buyer;
 import java.io.IOException;
 import java.util.Optional;
 
-import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.MessageCreator;
 import fishmarket.performatifs.Performatifs;
@@ -45,22 +44,25 @@ public class ListenForAuction extends AchieveREResponder {
     private ACLMessage toAnnounceHandler(ACLMessage request) throws UnreadableException, IOException, TooBrokeException {
         AuctionItem auctionItem = (AuctionItem) request.getContentObject();
 
+        ((Buyer) getAgent()).addAuction(auctionItem);
+
         if (auctionItem.getPrice() < ((Buyer) getAgent()).getMoneyLeft()) {
             System.out.println("Buyer " + getAgent().getName() + " bidded on auction " + auctionItem.toString());
             return MessageCreator.createMessageToAgent(request.getSender(), Performatifs.P_TO_BID, Optional.empty(), Optional.empty());
         } else throw new TooBrokeException();        
     }
 
+
     @Override
     protected ACLMessage prepareResponse(ACLMessage request) throws NotUnderstoodException, RefuseException {
-        // TODO Auto-generated method stub
-        return super.prepareResponse(request);
+        return request;
+        
     }
 
     @Override
     protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
-        // TODO Auto-generated method stub
-        return super.prepareResultNotification(request, response);
+        return response;
+        
     }
 
     

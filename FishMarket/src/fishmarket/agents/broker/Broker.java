@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fishmarket.agents.buyer.Buyer;
 import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.MessageCreator;
 import fishmarket.performatifs.Performatifs;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.WakerBehaviour;
 
 public class Broker extends Agent {
 
@@ -20,8 +18,6 @@ public class Broker extends Agent {
 
     private BrokerGUI brokerGUI = new BrokerGUI();
     
-    private WakerBehaviour waker = null;
-
     private final List<AID> buyers = new ArrayList<>();
     private final List<AuctionInstance> auctions = new ArrayList<>();
 

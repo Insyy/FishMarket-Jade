@@ -15,9 +15,9 @@ public class AuctionItem implements Serializable {
     private float step_rise;
     private float step_decrease;
 
-    public String[] toStringArrayGUI(String vendor) {
-        return new String[] { vendor, name, String.valueOf(price) };
-
+    public String[] toStringArrayGUI(String vendorOrBuyer) {
+        if (vendorOrBuyer == null) return new String[] { name, String.valueOf(price) };
+        return new String[] { vendorOrBuyer, name, String.valueOf(price) };
     }
 
     public AuctionItem(String name, int price, int delay, float step_rise, float step_decrease) {
