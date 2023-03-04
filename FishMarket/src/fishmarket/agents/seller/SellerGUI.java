@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 import java.awt.Color;
 import java.awt.Component;
-import java.text.NumberFormat;
 
 import fishmarket.auction.AuctionItem;
 
@@ -34,7 +33,7 @@ public class SellerGUI extends JFrame{
     private JFormattedTextField waitingTimeField  = new JFormattedTextField();
     private JFormattedTextField variationField  = new JFormattedTextField();
 
-    private JLabel sellerNameLabel = new JLabel("Nom");
+    private JLabel sellerNameLabel = new JLabel("Description de l'article");
     private JLabel initialPriceLabel = new JLabel("Prix initial (euros)");
     private JLabel waitingTimeLabel = new JLabel("Temps d'attente (seconde)");
     private JLabel variationLabel = new JLabel("Pas de variation (euros)");
