@@ -61,7 +61,7 @@ public class ListenForAuction extends AchieveREResponder {
 
         if (auctionItem.getPrice() < ((Buyer) getAgent()).getMoneyLeft()) {
             System.out.println("Buyer " + getAgent().getName() + " bidded on auction " + auctionItem.toString());
-            return MessageCreator.createMessageToAgent(request.getSender(), Performatifs.P_TO_BID, Optional.empty(), Optional.empty());
+            return MessageCreator.createMessageToAgent(request.getSender(), Performatifs.B_TO_BID, Optional.empty(), Optional.empty());
         } else throw new TooBrokeException();        
     }
 

@@ -1,7 +1,10 @@
 package fishmarket.agents.seller;
 
+import fishmarket.auction.AuctionBid;
+import fishmarket.auction.AuctionInstance;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREInitiator;
 
 public class PublishAuctionBehavior extends AchieveREInitiator {
@@ -13,6 +16,12 @@ public class PublishAuctionBehavior extends AchieveREInitiator {
     }
 
     protected void handleInform(ACLMessage inform) {
+        try {
+            ((Seller) getAgent()).handleAuctionPublished((AuctionBid) inform.getContentObject());
+        } catch (UnreadableException e) {
+            System.err.println("Tried to deserialize auction instance object sent from broker to seller.");
+            e.printStackTrace();
+        }
         System.out.println(TAG + inform.getSender().getName() + " successfully performed the requested action");
     }
 

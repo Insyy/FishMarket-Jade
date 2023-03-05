@@ -3,11 +3,15 @@ package fishmarket.agents.seller;
 import jade.core.Agent;
 import jade.core.AID;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import javax.swing.SwingUtilities;
 
+import fishmarket.auction.AuctionBid;
+import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
 import fishmarket.performatifs.MessageCreator;
@@ -16,6 +20,8 @@ public class Seller extends Agent {
 
 	private static String TAG;
 	private AID broker;
+
+	List<AuctionBid> bids = new ArrayList<>();
 	
 	SellerGUI gui;
 
@@ -65,5 +71,10 @@ public class Seller extends Agent {
 						Optional.of(item),
 						Optional.empty())));
 
+	}
+
+	public void handleAuctionPublished(AuctionBid bid){
+		bids.add(bid);
+		gui.addBidToTable(bid);
 	}
 }

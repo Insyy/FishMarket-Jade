@@ -8,8 +8,8 @@ public enum Performatifs {
 	V_TO_GIVE(ACLMessage.AGREE),
 	V_REP_BID(ACLMessage.INFORM),
 
-	P_TO_BID(ACLMessage.PROPOSE),
-	P_TO_PAY(ACLMessage.CONFIRM);
+	B_TO_BID(ACLMessage.PROPOSE),
+	B_TO_PAY(ACLMessage.CONFIRM);
 
 	private int jadeEquivalent;
 

@@ -13,18 +13,18 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREResponder;
 
-public class WaitForSeller extends AchieveREResponder {
+public class WaitForPublishedAuctions extends AchieveREResponder {
 
     private String TAG = "BROKER BEHAVIOUR |> ";
 
-    public WaitForSeller(Agent a, MessageTemplate mt) {
+    public WaitForPublishedAuctions(Agent a, MessageTemplate mt) {
         super(a, mt);
     }
 
     @Override
     protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
 
-        getAgent().addBehaviour(new WaitForSeller(getAgent(), null));
+        getAgent().addBehaviour(new WaitForPublishedAuctions(getAgent(), null));
 
         // System.out.println(TAG + " Handle request");
         int jadePerformative = request.getPerformative();
@@ -42,9 +42,11 @@ public class WaitForSeller extends AchieveREResponder {
 
         ((Broker) getAgent()).createAuctionInstance((AuctionItem) request.getContentObject(), request.getSender());
         getAgent().addBehaviour(new EndOfAuctionWaitTime(myAgent, ((Broker) getAgent()).getLastAuctionInstance()));
+
         ACLMessage msg = request.createReply();
+        msg.setContentObject(((Broker) getAgent()).getLastAuctionInstance());
         msg.setPerformative(ACLMessage.INFORM);
-        ((Broker) getAgent()).sendLastAuctionItemToBuyers();
+        ((Broker) getAgent()).sendAuctionItemsToBuyer();
         return msg;
     }
 

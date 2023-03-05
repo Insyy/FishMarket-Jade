@@ -11,7 +11,7 @@ public class EndOfAuctionWaitTime extends WakerBehaviour {
     AuctionInstance auctionInstance = null;
 
     public EndOfAuctionWaitTime(Agent a, AuctionInstance auctionInstance) {
-        super(a, new Date(System.currentTimeMillis() + auctionInstance.getItem().getDelay() * 1000));
+        super(a, new Date(System.currentTimeMillis() + (int) auctionInstance.getItem().getDelay() * 1000));
         this.auctionInstance = auctionInstance;
     }
 

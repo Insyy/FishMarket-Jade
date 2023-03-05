@@ -1,6 +1,5 @@
 package fishmarket.agents.seller;
 
-
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.BoxLayout;
@@ -17,32 +16,35 @@ import java.util.UUID;
 import java.awt.Color;
 import java.awt.Component;
 
+import fishmarket.auction.AuctionBid;
+import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 
-public class SellerGUI extends JFrame{
+public class SellerGUI extends JFrame {
 
     private final static String title = "Seller's view of the market";
-    JFrame frame= new JFrame(); 
+    JFrame frame = new JFrame();
     private JPanel wholePanel = new JPanel();
 
-    //TOP PANEL
+    // TOP PANEL
     private JPanel topPanel = new JPanel();
 
     private JFormattedTextField sellerNameField = new JFormattedTextField();
-    private JFormattedTextField initialPriceField  = new JFormattedTextField();
-    private JFormattedTextField waitingTimeField  = new JFormattedTextField();
-    private JFormattedTextField variationField  = new JFormattedTextField();
+    private JFormattedTextField initialPriceField = new JFormattedTextField();
+    private JFormattedTextField waitingTimeField = new JFormattedTextField();
+    private JFormattedTextField variationIncreaseField = new JFormattedTextField();
+    private JFormattedTextField variationDecreaseField = new JFormattedTextField();
 
-    private JLabel sellerNameLabel = new JLabel("Description de l'article");
-    private JLabel initialPriceLabel = new JLabel("Prix initial (euros)");
-    private JLabel waitingTimeLabel = new JLabel("Temps d'attente (seconde)");
-    private JLabel variationLabel = new JLabel("Pas de variation (euros)");
+    private JLabel itemNameLabel = new JLabel("Item's description");
+    private JLabel initialPriceLabel = new JLabel("Initial price (EUR)");
+    private JLabel waitingTimeLabel = new JLabel("Waiting time (s)");
+    private JLabel variationIncreaseLabel = new JLabel("Step of price increase (EUR)");
+    private JLabel variationDecreaseLabel = new JLabel("Step of price decrease (EUR)");
 
-    private JButton subscribeToAuctionBtn = new JButton("Creer annonce");
+    private JButton publishAuctionBtn = new JButton("Publish auction");
 
-    //TABLE PANEL
-    private JPanel tablePanel = new JPanel(); 
-    private JScrollPane scrollPane = new JScrollPane();
+    // TABLE PANEL
+    private JScrollPane scrollPane;
     private JTable table;
 
     public SellerGUI() {
@@ -51,24 +53,26 @@ public class SellerGUI extends JFrame{
 
     }
 
-    public void createGUI(){
+    public void createGUI() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        table = new JTable(new SellerTableModel());
-
-        //TABLE
-        wholePanel = new JPanel();
-        configureTableSettings();
 
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.add(addLabelText(sellerNameLabel,sellerNameField));
-        topPanel.add(addLabelText(initialPriceLabel,initialPriceField));
-        topPanel.add(addLabelText(waitingTimeLabel,waitingTimeField));
-        topPanel.add(addLabelText(variationLabel,variationField));
-        topPanel.add(subscribeToAuctionBtn);
-    
+        topPanel.add(createPanelWithLabelAndTextField(itemNameLabel, sellerNameField));
+        topPanel.add(createPanelWithLabelAndTextField(initialPriceLabel, initialPriceField));
+        topPanel.add(createPanelWithLabelAndTextField(waitingTimeLabel, waitingTimeField));
+        topPanel.add(createPanelWithLabelAndTextField(variationIncreaseLabel, variationIncreaseField));
+        topPanel.add(createPanelWithLabelAndTextField(variationDecreaseLabel, variationDecreaseField));
+        topPanel.add(publishAuctionBtn);
+        // TABLE
+        table = new JTable(new SellerTableModel());
+        configureTableSettings();
+        scrollPane = new JScrollPane(table);
+
         wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.Y_AXIS));
         wholePanel.add(topPanel);
+        wholePanel.add(scrollPane);
+
         getContentPane().add(wholePanel);
 
         pack();
@@ -76,9 +80,13 @@ public class SellerGUI extends JFrame{
 
     }
 
-    public JPanel addLabelText(JLabel label, JFormattedTextField textField){
+    private void setupListeners() {
+
+    }
+
+    public JPanel createPanelWithLabelAndTextField(JLabel label, JFormattedTextField textField) {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); 
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(label);
         panel.add(textField);
         return panel;
@@ -98,7 +106,7 @@ public class SellerGUI extends JFrame{
             }
 
             private void processRow(JTable table, int row, SellerTableModel sellerTableModel) {
-                try {
+                /* try {
                     if (sellerTableModel.isRowWon(row)) {
                         setBackground(sellerTableModel.ROW_WON_BID_COLOR);
                         setForeground(Color.WHITE);
@@ -108,44 +116,35 @@ public class SellerGUI extends JFrame{
                     }
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
-                }
+                } */
             }
         });
     }
 
-    public void refreshTableData(List<AuctionItem> auctions, List<UUID> auctionsWon) {
-        ((SellerTableModel) table.getModel()).refreshTableData(auctions, auctionsWon);
+    public void addBidToTable(AuctionBid bid) {
+        ((SellerTableModel) table.getModel()).addBidToTable(bid);
     }
 
     private static class SellerTableModel extends DefaultTableModel {
 
-        private final static String columnNames[] = { "Annonces", "Prix", "Agent Preneur" };
+        private final static String columnNames[] = { "Item", "Bidder", "Current price" };
         private final Color ROW_WON_BID_COLOR = Color.GREEN;
-
-        private List<AuctionItem> auctions = new ArrayList<>();
-        private List<UUID> auctionsWon = new ArrayList<>();
 
         SellerTableModel() {
             super(new Object[][] {},
                     columnNames);
         }
 
-        public boolean isRowWon(int row) throws IndexOutOfBoundsException {
+        /* public boolean isRowWon(int row) throws IndexOutOfBoundsException {
             if (auctions == null || auctions.size() < row)
                 return false;
-                return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getId().equals(uuid));
-        }
+            return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getId().equals(uuid));
+        } */
 
-        public void refreshTableData(List<AuctionItem> auctions, List<UUID> auctionsWon) {
-
-            this.auctionsWon = auctionsWon;
-
-            getDataVector().removeAllElements();
-            auctions.forEach(auction -> {
-                addRow(auction.toStringArrayGUI(null));
-            });
+        public void addBidToTable(AuctionBid bid) {
+            addRow(bid.toStringArray());
             fireTableDataChanged();
         }
     }
-    
+
 }

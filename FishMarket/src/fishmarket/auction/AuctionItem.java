@@ -10,8 +10,8 @@ public class AuctionItem implements Serializable {
 
     private UUID id;
     private String name;
-    private int price;
-    private int delay;
+    private float price;
+    private float delay;
     private float step_rise;
     private float step_decrease;
 
@@ -20,7 +20,7 @@ public class AuctionItem implements Serializable {
         return new String[] { vendorOrBuyer, name, String.valueOf(price) };
     }
 
-    public AuctionItem(String name, int price, int delay, float step_rise, float step_decrease) {
+    public AuctionItem(String name, float price, float delay, float step_rise, float step_decrease) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
@@ -33,11 +33,11 @@ public class AuctionItem implements Serializable {
         return name;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public int getDelay() {
+    public float getDelay() {
         return delay;
     }
 
@@ -49,7 +49,7 @@ public class AuctionItem implements Serializable {
         return step_decrease;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

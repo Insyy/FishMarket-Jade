@@ -26,10 +26,9 @@ public class Broker extends Agent {
         brokerGUI.recreateGUI(auctions);
     }
 
-    public void sendLastAuctionItemToBuyers() throws IOException {
-        if (auctions.isEmpty()) return;
+    public void sendAuctionItemToBuyers(AuctionItem item) throws IOException {
         for (final AID buyerAID : buyers) {
-            send(MessageCreator.createMessageToAgent(buyerAID, Performatifs.V_TO_ANNOUNCE,Optional.of(auctions.get(auctions.size() - 1).getItem()), Optional.empty()));   
+            send(MessageCreator.createMessageToAgent(buyerAID, Performatifs.V_TO_ANNOUNCE,Optional.of(getLastAuctionInstance()), Optional.empty()));   
         }
     }
 
@@ -49,7 +48,7 @@ public class Broker extends Agent {
                 buyers.add(new AID(String.valueOf(object), AID.ISLOCALNAME));
             }
 
-        addBehaviour(new WaitForSeller(this, null));
+        addBehaviour(new WaitForPublishedAuctions(this, null));
     }
 
 }
