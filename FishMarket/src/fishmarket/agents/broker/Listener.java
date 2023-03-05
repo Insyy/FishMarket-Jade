@@ -2,7 +2,6 @@ package fishmarket.agents.broker;
 
 import java.io.IOException;
 
-import fishmarket.agents.seller.EndOfAuctionWaitTime;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
 import jade.core.Agent;
@@ -15,8 +14,6 @@ import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREResponder;
 
 public class Listener extends AchieveREResponder {
-
-    private String TAG = "BROKER BEHAVIOUR |> ";
 
     public Listener(Agent a, MessageTemplate mt) {
         super(a, mt);

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import fishmarket.auction.AuctionInstance;
-import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.MessageCreator;
 import fishmarket.performatifs.Performatifs;
 import jade.core.Agent;

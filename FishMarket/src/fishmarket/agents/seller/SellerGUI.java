@@ -5,20 +5,14 @@ import javax.swing.JFormattedTextField;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.awt.Color;
 import java.awt.Component;
 
 import fishmarket.auction.AuctionBid;
-import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 import jade.core.Agent;
 
@@ -118,7 +112,6 @@ public class SellerGUI extends JFrame {
 
         } catch (Exception event) {
             event.printStackTrace();
-            // TODO: handle exception
         }
     }
 
@@ -168,7 +161,6 @@ public class SellerGUI extends JFrame {
     private static class SellerTableModel extends DefaultTableModel {
 
         private final static String columnNames[] = { "Item", "Bidder", "Current price" };
-        private final Color ROW_WON_BID_COLOR = Color.GREEN;
 
         SellerTableModel() {
             super(new Object[][] {},

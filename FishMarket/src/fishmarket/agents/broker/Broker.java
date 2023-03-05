@@ -26,7 +26,6 @@ public class Broker extends Agent {
         try {
             sendAuctionItemToBuyers(getLastAuctionInstance());
         } catch (IndexOutOfBoundsException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         brokerGUI.recreateGUI(auctions);

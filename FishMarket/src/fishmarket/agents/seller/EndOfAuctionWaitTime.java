@@ -2,7 +2,6 @@ package fishmarket.agents.seller;
 
 import java.util.Date;
 
-import fishmarket.auction.AuctionInstance;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 
@@ -20,7 +19,6 @@ public class EndOfAuctionWaitTime extends WakerBehaviour {
     @Override
     protected void onWake() {
         System.out.println("EndOfAuctionWaitTime it is time to bid !");
-        //TODO
     }
     
 }

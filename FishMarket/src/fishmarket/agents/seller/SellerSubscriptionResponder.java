@@ -11,12 +11,10 @@ public class SellerSubscriptionResponder extends SubscriptionResponder{
 
     public SellerSubscriptionResponder(Agent a, MessageTemplate mt) {
         super(a, mt);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
     protected ACLMessage handleSubscription(ACLMessage subscription) throws NotUnderstoodException, RefuseException {
-        // TODO Auto-generated method stub
         ((Seller) getAgent()).addSubscriber(subscription.getSender());
         return super.handleSubscription(subscription);
     }

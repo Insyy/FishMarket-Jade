@@ -1,7 +1,5 @@
 package fishmarket.auction;
 
-import java.util.List;
-
 import jade.core.AID;
 import jade.util.leap.Serializable;
 
