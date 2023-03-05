@@ -5,6 +5,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -73,6 +74,8 @@ public class SellerGUI extends JFrame {
         wholePanel.add(topPanel);
         wholePanel.add(scrollPane);
 
+        setupListeners();
+        
         getContentPane().add(wholePanel);
 
         pack();
@@ -81,8 +84,42 @@ public class SellerGUI extends JFrame {
     }
 
     private void setupListeners() {
-
+        sellerNameField.addActionListener(e -> sellerNameListerner(e));
+        initialPriceField.addActionListener(e -> priceListerner(e));
+        waitingTimeField.addActionListener(e -> waitingTimeListerner(e));
+        variationIncreaseField.addActionListener(e -> variationIncreaseListerner(e));
+        variationDecreaseField.addActionListener(e -> variationDecreaseListerner(e));
+        publishAuctionBtn.addActionListener(e -> publishAuctionListerner(e));
     }
+
+    /* Listeners */
+
+    private void sellerNameListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + sellerNameField.getText());
+    }
+
+
+    private void priceListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + initialPriceField.getText());
+    }
+
+    private void waitingTimeListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + waitingTimeField.getText());
+    }
+
+
+    private void variationIncreaseListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + variationIncreaseField.getText());
+    }
+
+    private void variationDecreaseListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + variationDecreaseField.getText());
+    }
+
+    private void publishAuctionListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + publishAuctionBtn.getText());
+    }
+
 
     public JPanel createPanelWithLabelAndTextField(JLabel label, JFormattedTextField textField) {
         JPanel panel = new JPanel();
