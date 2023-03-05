@@ -20,7 +20,6 @@ public class EndOfAuctionWaitTime extends WakerBehaviour {
     @Override
     protected void onWake() {
         System.out.println("EndOfAuctionWaitTime it is time to bid !");
-        
         //TODO
     }
     
