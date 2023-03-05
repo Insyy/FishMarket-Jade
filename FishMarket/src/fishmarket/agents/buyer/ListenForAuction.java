@@ -3,6 +3,7 @@ package fishmarket.agents.buyer;
 import java.io.IOException;
 import java.util.Optional;
 
+import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.MessageCreator;
 import fishmarket.performatifs.Performatifs;
@@ -55,7 +56,7 @@ public class ListenForAuction extends AchieveREResponder {
     }
 
     private ACLMessage toAnnounceHandler(final ACLMessage request) throws UnreadableException, IOException, TooBrokeException {
-        final AuctionItem auctionItem = (AuctionItem) request.getContentObject();
+        final AuctionItem auctionItem = (AuctionItem) ((AuctionInstance) request.getContentObject()).getItem();
 
         ((Buyer) getAgent()).addAuction(auctionItem);
 

@@ -46,7 +46,6 @@ public class WaitForPublishedAuctions extends AchieveREResponder {
         ACLMessage msg = request.createReply();
         msg.setContentObject(((Broker) getAgent()).getLastAuctionInstance());
         msg.setPerformative(ACLMessage.INFORM);
-        ((Broker) getAgent()).sendAuctionItemsToBuyer();
         return msg;
     }
 

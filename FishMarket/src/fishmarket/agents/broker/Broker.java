@@ -23,10 +23,16 @@ public class Broker extends Agent {
 
     public void createAuctionInstance(final AuctionItem item, final AID seller) {
         auctions.add(new AuctionInstance(item, seller));
+        try {
+            sendAuctionItemToBuyers(getLastAuctionInstance());
+        } catch (IndexOutOfBoundsException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         brokerGUI.recreateGUI(auctions);
     }
 
-    public void sendAuctionItemToBuyers(AuctionItem item) throws IOException {
+    public void sendAuctionItemToBuyers(AuctionInstance item) throws IOException {
         for (final AID buyerAID : buyers) {
             send(MessageCreator.createMessageToAgent(buyerAID, Performatifs.V_TO_ANNOUNCE,Optional.of(getLastAuctionInstance()), Optional.empty()));   
         }
