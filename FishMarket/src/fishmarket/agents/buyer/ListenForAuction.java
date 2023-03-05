@@ -16,11 +16,11 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREResponder;
 
-public class ListenForAnnounce extends AchieveREResponder {
+public class ListenForAuction extends AchieveREResponder {
 
     private final String TAG = "ListenForAnnounce |> ";
 
-    public ListenForAnnounce(final Agent a, final MessageTemplate mt) {
+    public ListenForAuction(final Agent a, final MessageTemplate mt) {
         super(a, mt);
     }
 
@@ -33,7 +33,7 @@ public class ListenForAnnounce extends AchieveREResponder {
         final int jadePerformative = request.getPerformative();
         if (jadePerformative == Performatifs.V_TO_ANNOUNCE.getJadeEquivalent())
             try {
-                getAgent().addBehaviour(new ListenForAnnounce(getAgent(), null));
+                getAgent().addBehaviour(new ListenForAuction(getAgent(), null));
                 return toAnnounceHandler(request);
             } catch (UnreadableException | IOException | TooBrokeException e) {
                 e.printStackTrace();
@@ -60,6 +60,8 @@ public class ListenForAnnounce extends AchieveREResponder {
         final AuctionInstance auctionInstance =  (AuctionInstance) request.getContentObject();
 
         ((Buyer) getAgent()).addAuction(auctionInstance);
+
+        
 
         return sendBid(request, auctionInstance);        
     }

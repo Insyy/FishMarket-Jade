@@ -18,7 +18,7 @@ public class Buyer extends Agent {
 
 	BuyerGUI gui;
 
-	Integer moneyLeft;
+	Integer moneyLeft  = 9999;
 	
 	public static List<UUID> getWonAuctionsUUID() {
 		return wonAuctionsUUID;
@@ -65,13 +65,9 @@ public class Buyer extends Agent {
 			  }
 			});
 		}
-		
-
-		moneyLeft = Integer.valueOf((String.valueOf(getArguments()[0])));
-
 
 		// Read name of broker as argument
-		addBehaviour(new ListenForAnnounce(this, null));
+		addBehaviour(new ListenForAuction(this, null));
 	}
 
 
