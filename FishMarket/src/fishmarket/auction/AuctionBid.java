@@ -17,5 +17,10 @@ public class AuctionBid implements Serializable {
     public String[] toStringArray() {
         return new String[]{itemName, bidderName, Float.toString(price)};
     }
+
+    @Override
+    public String toString() {
+        return "AuctionBid [itemName=" + itemName + ", bidderName=" + bidderName + ", price=" + price + "]";
+    }
     
 }

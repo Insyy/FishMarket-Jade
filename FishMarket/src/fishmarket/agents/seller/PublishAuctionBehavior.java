@@ -16,12 +16,7 @@ public class PublishAuctionBehavior extends AchieveREInitiator {
     }
 
     protected void handleInform(ACLMessage inform) {
-        try {
-            ((Seller) getAgent()).handleAuctionPublished((AuctionBid) inform.getContentObject());
-        } catch (UnreadableException e) {
-            System.err.println("Tried to deserialize auction instance object sent from broker to seller.");
-            e.printStackTrace();
-        }
+        
         System.out.println(TAG + inform.getSender().getName() + " successfully performed the requested action");
     }
 

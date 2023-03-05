@@ -1,6 +1,7 @@
 package fishmarket.agents.seller;
 import java.io.IOException;
 
+import fishmarket.auction.AuctionBid;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
 import jade.core.Agent;
@@ -36,6 +37,13 @@ public class WaitForBidsBehavior extends AchieveREResponder {
     }
 
     private ACLMessage toBidHandler(ACLMessage request) throws UnreadableException, IOException {
+        System.out.println(((Seller) getAgent()).TAG + "Attempting to deserialize auction instance object sent from broker to seller.");
+        try {
+            ((Seller) getAgent()).handleBidReceived((AuctionBid) request.getContentObject());
+        } catch (UnreadableException e) {
+            System.err.println(((Seller) getAgent()).TAG + "Attempting to deserialize auction instance object sent from broker to seller.");
+            e.printStackTrace();
+        }
 
         ACLMessage msg = request.createReply();
         msg.setPerformative(ACLMessage.INFORM);

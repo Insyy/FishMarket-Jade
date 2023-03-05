@@ -20,8 +20,11 @@ import java.awt.Component;
 import fishmarket.auction.AuctionBid;
 import fishmarket.auction.AuctionInstance;
 import fishmarket.auction.AuctionItem;
+import jade.core.Agent;
 
 public class SellerGUI extends JFrame {
+
+    Seller owner = null;
 
     private final static String title = "Seller's view of the market";
     JFrame frame = new JFrame();
@@ -30,11 +33,19 @@ public class SellerGUI extends JFrame {
     // TOP PANEL
     private JPanel topPanel = new JPanel();
 
-    private JFormattedTextField sellerNameField = new JFormattedTextField();
+    private JFormattedTextField itemNameField = new JFormattedTextField();
     private JFormattedTextField initialPriceField = new JFormattedTextField();
     private JFormattedTextField waitingTimeField = new JFormattedTextField();
     private JFormattedTextField variationIncreaseField = new JFormattedTextField();
     private JFormattedTextField variationDecreaseField = new JFormattedTextField();
+
+    {
+        itemNameField.setText("Dinosaur");
+        initialPriceField.setText(String.valueOf(38));
+        waitingTimeField.setText(String.valueOf(60));
+        variationIncreaseField.setText(String.valueOf(34));
+        variationDecreaseField.setText(String.valueOf(17));
+    }
 
     private JLabel itemNameLabel = new JLabel("Item's description");
     private JLabel initialPriceLabel = new JLabel("Initial price (EUR)");
@@ -48,8 +59,9 @@ public class SellerGUI extends JFrame {
     private JScrollPane scrollPane;
     private JTable table;
 
-    public SellerGUI() {
+    public SellerGUI(Agent owner) {
         super(title);
+        this.owner = (Seller) owner;
         createGUI();
 
     }
@@ -59,7 +71,7 @@ public class SellerGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.add(createPanelWithLabelAndTextField(itemNameLabel, sellerNameField));
+        topPanel.add(createPanelWithLabelAndTextField(itemNameLabel, itemNameField));
         topPanel.add(createPanelWithLabelAndTextField(initialPriceLabel, initialPriceField));
         topPanel.add(createPanelWithLabelAndTextField(waitingTimeLabel, waitingTimeField));
         topPanel.add(createPanelWithLabelAndTextField(variationIncreaseLabel, variationIncreaseField));
@@ -75,7 +87,7 @@ public class SellerGUI extends JFrame {
         wholePanel.add(scrollPane);
 
         setupListeners();
-        
+
         getContentPane().add(wholePanel);
 
         pack();
@@ -84,42 +96,27 @@ public class SellerGUI extends JFrame {
     }
 
     private void setupListeners() {
-        sellerNameField.addActionListener(e -> sellerNameListerner(e));
-        initialPriceField.addActionListener(e -> priceListerner(e));
-        waitingTimeField.addActionListener(e -> waitingTimeListerner(e));
-        variationIncreaseField.addActionListener(e -> variationIncreaseListerner(e));
-        variationDecreaseField.addActionListener(e -> variationDecreaseListerner(e));
-        publishAuctionBtn.addActionListener(e -> publishAuctionListerner(e));
+        publishAuctionBtn.addActionListener(e -> handlePublishBtnClick(e));
     }
 
     /* Listeners */
 
-    private void sellerNameListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + sellerNameField.getText());
+    private void handlePublishBtnClick(java.awt.event.ActionEvent e) {
+
+        try {
+            owner.publishAuctionItem(new AuctionItem(
+                    itemNameField.getText(),
+                    Float.parseFloat(initialPriceField.getText()),
+                    Float.parseFloat(waitingTimeField.getText()),
+                    Float.parseFloat(variationIncreaseField.getText()),
+                    Float.parseFloat(variationDecreaseField.getText())
+                    ));
+
+        } catch (Exception event) {
+            event.printStackTrace();
+            // TODO: handle exception
+        }
     }
-
-
-    private void priceListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + initialPriceField.getText());
-    }
-
-    private void waitingTimeListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + waitingTimeField.getText());
-    }
-
-
-    private void variationIncreaseListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + variationIncreaseField.getText());
-    }
-
-    private void variationDecreaseListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + variationDecreaseField.getText());
-    }
-
-    private void publishAuctionListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + publishAuctionBtn.getText());
-    }
-
 
     public JPanel createPanelWithLabelAndTextField(JLabel label, JFormattedTextField textField) {
         JPanel panel = new JPanel();
@@ -143,17 +140,19 @@ public class SellerGUI extends JFrame {
             }
 
             private void processRow(JTable table, int row, SellerTableModel sellerTableModel) {
-                /* try {
-                    if (sellerTableModel.isRowWon(row)) {
-                        setBackground(sellerTableModel.ROW_WON_BID_COLOR);
-                        setForeground(Color.WHITE);
-                    } else {
-                        setBackground(this.getBackground());
-                        setForeground(this.getForeground());
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                } */
+                /*
+                 * try {
+                 * if (sellerTableModel.isRowWon(row)) {
+                 * setBackground(sellerTableModel.ROW_WON_BID_COLOR);
+                 * setForeground(Color.WHITE);
+                 * } else {
+                 * setBackground(this.getBackground());
+                 * setForeground(this.getForeground());
+                 * }
+                 * } catch (IndexOutOfBoundsException e) {
+                 * e.printStackTrace();
+                 * }
+                 */
             }
         });
     }
@@ -172,11 +171,14 @@ public class SellerGUI extends JFrame {
                     columnNames);
         }
 
-        /* public boolean isRowWon(int row) throws IndexOutOfBoundsException {
-            if (auctions == null || auctions.size() < row)
-                return false;
-            return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getId().equals(uuid));
-        } */
+        /*
+         * public boolean isRowWon(int row) throws IndexOutOfBoundsException {
+         * if (auctions == null || auctions.size() < row)
+         * return false;
+         * return auctionsWon.stream().anyMatch(uuid ->
+         * auctions.get(row).getId().equals(uuid));
+         * }
+         */
 
         public void addBidToTable(AuctionBid bid) {
             addRow(bid.toStringArray());

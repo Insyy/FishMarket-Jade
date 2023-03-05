@@ -18,9 +18,10 @@ import fishmarket.performatifs.MessageCreator;
 
 public class Seller extends Agent {
 
-	private static String TAG;
+	String TAG;
 	private AID broker;
 
+	AuctionInstance auction = null;
 	List<AuctionBid> bids = new ArrayList<>();
 	
 	SellerGUI gui;
@@ -28,11 +29,12 @@ public class Seller extends Agent {
 	protected void setup() {
 		TAG = getName() + " |> ";
 		// Read name of broker as argument
+		Seller localref = this;
 
 			SwingUtilities.invokeLater(new Runnable() {
 			  @Override
 			  public void run() {
-				gui = new SellerGUI();
+				gui = new SellerGUI(localref);
 				//gui.refreshTableData(auctions, wonAuctionsUUID);
 			  }
 			});
@@ -48,19 +50,10 @@ public class Seller extends Agent {
 		broker = new AID(String.valueOf(args[0]), AID.ISLOCALNAME);
 		System.out.println(TAG + "Name of broker agent is " + broker.getName());
 
-		try {
-
-			publishAuctionItem("Dourade", new Random().nextInt(100), 5, (float) .5, (float) .9);
-
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
 	}
 
-	private void publishAuctionItem(final String name, final int price, final int delay, final float step_rise, final float step_decrease)
+	public void publishAuctionItem(AuctionItem item)
 			throws IOException {
-
-		final AuctionItem item = new AuctionItem(name, price, delay, step_rise, step_decrease);
 
 		System.out.println(TAG + "Publishing auction item " + item.toString());
 
@@ -73,7 +66,8 @@ public class Seller extends Agent {
 
 	}
 
-	public void handleAuctionPublished(AuctionBid bid){
+	public void handleBidReceived(AuctionBid bid){
+		System.out.println(TAG + " Bid received " + bid.toString());
 		bids.add(bid);
 		gui.addBidToTable(bid);
 	}

@@ -43,6 +43,7 @@ public class Buyer extends Agent {
 
 	protected void setup() {
 		TAG = getName() + " |> ";
+		System.out.println(TAG + "ONLINE");
 
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
