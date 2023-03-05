@@ -21,8 +21,9 @@ public class Seller extends Agent {
 	String TAG;
 	private AID broker;
 
-	AuctionInstance auction = null;
-	List<AuctionBid> bids = new ArrayList<>();
+	private AuctionInstance auction = null;
+	private List<AuctionBid> bids = new ArrayList<>();
+	private List<AID> subscribedAgents = new ArrayList<>();
 	
 	SellerGUI gui;
 
@@ -56,6 +57,8 @@ public class Seller extends Agent {
 			throws IOException {
 
 		System.out.println(TAG + "Publishing auction item " + item.toString());
+		
+        addBehaviour(new SellerSubscriptionResponder(this, null));
 
 		addBehaviour(new PublishAuctionBehavior(this,
 				MessageCreator.createMessageToAgent(
@@ -64,11 +67,22 @@ public class Seller extends Agent {
 						Optional.of(item),
 						Optional.empty())));
 
+
+
 	}
 
 	public void handleBidReceived(AuctionBid bid){
 		System.out.println(TAG + " Bid received " + bid.toString());
 		bids.add(bid);
 		gui.addBidToTable(bid);
+	}
+
+	public void addSubscriber(AID agent){
+		if (subscribedAgents.contains(agent)) return;
+		subscribedAgents.add(agent);
+	}
+
+	public AuctionInstance getAuction(){
+		return auction;
 	}
 }

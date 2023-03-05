@@ -54,7 +54,7 @@ public class Broker extends Agent {
                 buyers.add(new AID(String.valueOf(object), AID.ISLOCALNAME));
             }
 
-        addBehaviour(new WaitForPublishedAuctions(this, null));
+        addBehaviour(new Listener(this, null));
     }
 
 }

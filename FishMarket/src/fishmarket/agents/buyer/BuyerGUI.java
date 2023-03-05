@@ -18,7 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import fishmarket.auction.AuctionItem;
+import fishmarket.auction.AuctionInstance;
 
 public class BuyerGUI extends JFrame {
 
@@ -28,7 +28,7 @@ public class BuyerGUI extends JFrame {
         private final static String columnNames[] = { "Description", "Current price" };
         private final Color ROW_WON_BID_COLOR = Color.GREEN;
 
-        private List<AuctionItem> auctions = new ArrayList<>();
+        private List<AuctionInstance> auctions = new ArrayList<>();
         private List<UUID> auctionsWon = new ArrayList<>();
 
         BuyerTableModel() {
@@ -39,7 +39,7 @@ public class BuyerGUI extends JFrame {
         public boolean isRowWon(final int row) throws IndexOutOfBoundsException {
             if (auctions == null || auctions.size() < row)
                 return false;
-            return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getId().equals(uuid));
+            return auctionsWon.stream().anyMatch(uuid -> auctions.get(row).getItem().getId().equals(uuid));
         }
 
         
@@ -48,7 +48,7 @@ public class BuyerGUI extends JFrame {
         public boolean isCellEditable(int row, int column) {
             return false;
         }
-        public void refreshTableData(final List<AuctionItem> auctions, final List<UUID> auctionsWon) {
+        public void refreshTableData(final List<AuctionInstance> auctions, final List<UUID> auctionsWon) {
 
             System.out.println("Refreshing table with data from " + auctions);
 
@@ -57,9 +57,8 @@ public class BuyerGUI extends JFrame {
 
             getDataVector().removeAllElements();
             auctions.forEach(auction -> {
-                addRow(auction.toStringArrayGUI(null));
+                addRow(auction.getItem().toStringArrayGUI(null));
             });
-            System.out.println(getRowCount() + " rows found");
             fireTableDataChanged();
         }
     }
@@ -127,41 +126,37 @@ public class BuyerGUI extends JFrame {
     }
 
     private void setupListeners() {
-        automaticStartBtn.addActionListener(e -> automaticStartListerner(e));
-        manualStartBtn.addActionListener(e -> manualStartListerner(e));
-        initialAmountText.addActionListener(e -> initialAmountListerner(e));
-        subscribeToAuctionBtn.addActionListener(e -> subscribeListerner(e));
-        bidBtn.addActionListener(e -> bidListerner(e));
+        automaticStartBtn.addActionListener(e -> automaticStartListener(e));
+        manualStartBtn.addActionListener(e -> manualStartListener(e));
+        subscribeToAuctionBtn.addActionListener(e -> subscribeListener(e));
+        bidBtn.addActionListener(e -> bidListener(e));
     }
 
     /* Listeners */
 
-    private void automaticStartListerner(java.awt.event.ActionEvent e) {
+    private void automaticStartListener(java.awt.event.ActionEvent e) {
         System.out.println("Text=" + automaticStartBtn.getActionCommand());
     }
 
 
-    private void manualStartListerner(java.awt.event.ActionEvent e) {
+    private void manualStartListener(java.awt.event.ActionEvent e) {
         System.out.println("Text=" + manualStartBtn.getActionCommand());
     }
 
-    private void initialAmountListerner(java.awt.event.ActionEvent e) {
-        System.out.println("Text=" + initialAmountText.getText());
-    }
 
-
-    private void subscribeListerner(java.awt.event.ActionEvent e) {
+    private void subscribeListener(java.awt.event.ActionEvent e) {
+        
         System.out.println("Text=" + subscribeToAuctionBtn.getText());
     }
 
-    private void bidListerner(java.awt.event.ActionEvent e) {
+    private void bidListener(java.awt.event.ActionEvent e) {
         System.out.println("Text=" + bidBtn.getText());
     }
 
 
 
 
-    public void refreshTableData(final List<AuctionItem> auctions, final List<UUID> auctionsWon) {
+    public void refreshTableData(final List<AuctionInstance> auctions, final List<UUID> auctionsWon) {
         ((BuyerTableModel) table.getModel()).refreshTableData(auctions, auctionsWon);
     }
 

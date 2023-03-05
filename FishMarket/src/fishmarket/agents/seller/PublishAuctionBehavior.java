@@ -4,7 +4,6 @@ import fishmarket.auction.AuctionBid;
 import fishmarket.auction.AuctionInstance;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREInitiator;
 
 public class PublishAuctionBehavior extends AchieveREInitiator {
@@ -16,12 +15,21 @@ public class PublishAuctionBehavior extends AchieveREInitiator {
     }
 
     protected void handleInform(ACLMessage inform) {
+        try {
+            AuctionInstance instance = (AuctionInstance) inform.getContentObject();
+            ((Seller) getAgent()).handleBidReceived(new AuctionBid(instance.getItem().getName(), "None", instance.getItem().getPrice()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         System.out.println(TAG + inform.getSender().getName() + " successfully performed the requested action");
+        done();
+        
     }
 
     protected void handleRefuse(ACLMessage refuse) {
         System.out.println(TAG + refuse.getSender().getName() + " refused to perform the requested action");
+        done();
     }
 
     protected void handleFailure(ACLMessage failure) {
@@ -32,7 +40,7 @@ public class PublishAuctionBehavior extends AchieveREInitiator {
             done();
         } else {
             System.out.println(TAG + failure.getSender().getName() + " failed to perform the requested action");
-            block(10_000);
+            done();
         }
     }
 }

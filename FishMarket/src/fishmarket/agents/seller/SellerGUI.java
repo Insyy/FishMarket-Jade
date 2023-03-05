@@ -99,6 +99,10 @@ public class SellerGUI extends JFrame {
         publishAuctionBtn.addActionListener(e -> handlePublishBtnClick(e));
     }
 
+    public void disablePublishBtn(){
+        publishAuctionBtn.setEnabled(false);
+    }
+
     /* Listeners */
 
     private void handlePublishBtnClick(java.awt.event.ActionEvent e) {
@@ -181,6 +185,7 @@ public class SellerGUI extends JFrame {
          */
 
         public void addBidToTable(AuctionBid bid) {
+            System.out.println("Seller added bid " + bid.toString()  + " to table");
             addRow(bid.toStringArray());
             fireTableDataChanged();
         }

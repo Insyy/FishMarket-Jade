@@ -7,24 +7,24 @@ import java.util.UUID;
 
 import javax.swing.SwingUtilities;
 
-import fishmarket.auction.AuctionItem;
+import fishmarket.auction.AuctionInstance;
 
 public class Buyer extends Agent {
 
 	private static String TAG;
 
-	private static final List<AuctionItem> auctions = new ArrayList<>();
+	private static final List<AuctionInstance> auctions = new ArrayList<>();
 	private static final List<UUID> wonAuctionsUUID = new ArrayList<>();
-
-	public static List<UUID> getWonAuctionsUUID() {
-		return wonAuctionsUUID;
-	}
 
 	BuyerGUI gui;
 
 	Integer moneyLeft;
+	
+	public static List<UUID> getWonAuctionsUUID() {
+		return wonAuctionsUUID;
+	}
 
-	public List<AuctionItem> getAuctions() {
+	public List<AuctionInstance> getAuctions() {
 		return auctions;
 	}
 
@@ -36,9 +36,21 @@ public class Buyer extends Agent {
 		this.moneyLeft = moneyLeft;
 	}
 
-	public void addAuction(final AuctionItem auction) {
+	public void addAuction(final AuctionInstance auction) {
+
+		for (int i = 0; i < auctions.size(); i++) {
+			AuctionInstance t = auctions.get(i);
+			// UPDATE IF ALREADY EXISTS
+			if (t.getItem().getId().equals(auction.getItem().getId())) {
+				auctions.set(i, auction);
+				gui.refreshTableData(auctions, wonAuctionsUUID);
+				return;
+			}
+		}
+
 		auctions.add(auction);
 		gui.refreshTableData(auctions, wonAuctionsUUID);
+		
 	}
 
 	protected void setup() {
@@ -59,7 +71,7 @@ public class Buyer extends Agent {
 
 
 		// Read name of broker as argument
-		addBehaviour(new ListenForAuction(this, null));
+		addBehaviour(new ListenForAnnounce(this, null));
 	}
 
 

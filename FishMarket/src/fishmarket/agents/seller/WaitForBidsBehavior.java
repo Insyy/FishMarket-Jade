@@ -1,6 +1,8 @@
 package fishmarket.agents.seller;
 import java.io.IOException;
 
+import javax.swing.text.html.HTML.Tag;
+
 import fishmarket.auction.AuctionBid;
 import fishmarket.auction.AuctionItem;
 import fishmarket.performatifs.Performatifs;
@@ -15,7 +17,7 @@ import jade.proto.AchieveREResponder;
 
 public class WaitForBidsBehavior extends AchieveREResponder {
 
-    private String TAG = "BROKER BEHAVIOUR |> ";
+    private String TAG = "WaitForBidsBehavior |> ";
 
     public WaitForBidsBehavior(Agent a, MessageTemplate mt) {
         super(a, mt);
