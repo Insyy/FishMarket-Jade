@@ -81,7 +81,6 @@ public class BuyerGUI extends JFrame {
     //BOTTOM PANEL
     private final JPanel bottomPanel = new JPanel();
     private final JButton subscribeToAuctionBtn = new JButton("Subscribe to selected auction(s)");
-
     private final JButton bidBtn = new JButton("Bid on selected auction");
 
     public BuyerGUI() {
@@ -118,12 +117,49 @@ public class BuyerGUI extends JFrame {
         wholePanel.add(scrollPane);
         wholePanel.add(bottomPanel);
 
+        setupListeners();
+
         getContentPane().add(wholePanel);
 
         pack();
         setVisible(true);
 
     }
+
+    private void setupListeners() {
+        automaticStartBtn.addActionListener(e -> automaticStartListerner(e));
+        manualStartBtn.addActionListener(e -> manualStartListerner(e));
+        initialAmountText.addActionListener(e -> initialAmountListerner(e));
+        subscribeToAuctionBtn.addActionListener(e -> subscribeListerner(e));
+        bidBtn.addActionListener(e -> bidListerner(e));
+    }
+
+    /* Listeners */
+
+    private void automaticStartListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + automaticStartBtn.getActionCommand());
+    }
+
+
+    private void manualStartListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + manualStartBtn.getActionCommand());
+    }
+
+    private void initialAmountListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + initialAmountText.getText());
+    }
+
+
+    private void subscribeListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + subscribeToAuctionBtn.getText());
+    }
+
+    private void bidListerner(java.awt.event.ActionEvent e) {
+        System.out.println("Text=" + bidBtn.getText());
+    }
+
+
+
 
     public void refreshTableData(final List<AuctionItem> auctions, final List<UUID> auctionsWon) {
         ((BuyerTableModel) table.getModel()).refreshTableData(auctions, auctionsWon);
